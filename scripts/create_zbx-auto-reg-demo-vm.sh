@@ -34,15 +34,15 @@ gcloud compute instances add-tags srv04 --tags=zabbix-agent --zone=europe-west4-
 
 # srv05 SLES
 IMAGE_SLES15=`gcloud compute images list | grep sles-15-sp2-v | awk '{print $1}'`
-gcloud compute instances create srv05 --image ${IMAGE_SLES15} --image-project=rhel-cloud --zone=europe-west4-c --metadata-from-file startup-script=./zbx-auto-reg-demo-gcp/scripts/install-gcp-sles15.sh
+gcloud compute instances create srv05 --image ${IMAGE_SLES15} --image-project=suse-cloud --zone=europe-west4-c --metadata-from-file startup-script=./zbx-auto-reg-demo-gcp/scripts/install-gcp-sles15.sh
 gcloud compute instances add-tags srv05 --tags=http-server --zone=europe-west4-c
 gcloud compute instances add-tags srv05 --tags=zabbix-agent --zone=europe-west4-c
 
 # srv06 FreeBSD 12
 IMAGE_FBSD=`gcloud compute images list --project freebsd-org-cloud-dev --no-standard-images | grep -i 12-2-release-amd64 | awk '{print $1}'`;
-gcloud compute instances create srv06 --image ${IMAGE_FBSD} --image-project=freebsd-org-cloud-dev --metadata-from-file startup-script=./zbx-auto-reg-demo-gcp/scripts/install-gcp-fbsd12.sh
-gcloud compute instances add-tags srv-06 --tags=http-server
-gcloud compute instances add-tags srv-06 --tags=zabbix-agent
+gcloud compute instances create srv06 --image ${IMAGE_FBSD} --image-project=freebsd-org-cloud-dev --zone=europe-west4-c --metadata-from-file startup-script=./zbx-auto-reg-demo-gcp/scripts/install-gcp-fbsd12.sh
+gcloud compute instances add-tags srv06 --tags=http-server --zone=europe-west4-c
+gcloud compute instances add-tags srv06 --tags=zabbix-agent --zone=europe-west4-c
 
 # gcloud compute regions list | grep europe-west
 

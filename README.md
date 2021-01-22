@@ -50,6 +50,25 @@ srv01 - http://35.246.211.200
 srv02 - http://34.89.152.77
 srv03 - http://34.107.115.225
 ```
+
+## DNS A records for EDU
+- Create DNS records via cloudflare API
+
+```console
+./zbx-auto-reg-demo-gcp/scripts/create_dns_records.sh
+
+cli4 --post name='srv01' type=A content="35.246.211.200" /zones/:pfsense.cz/dns_records
+cli4 --post name='srv02' type=A content="34.89.152.77" /zones/:pfsense.cz/dns_records
+cli4 --post name='srv03' type=A content="34.107.115.225" /zones/:pfsense.cz/dns_records
+```
+
+## HTML list of VM
+- Create HTML list of running EDU VM
+
+```console
+./zbx-auto-reg-demo-gcp/scripts/create_html_list.sh
+```
+
 ## To do
 
 - Zabbxi Auto-Registration - Ectrypted
