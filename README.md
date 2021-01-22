@@ -45,21 +45,27 @@ sudo su -
 - List Zabbix srv0X VM and external IPv4
 
 ```console
-gcloud compute instances list | awk '{print $1" - http://"$5"}' | grep srv0
-srv01 - http://35.246.211.200
-srv02 - http://34.89.152.77
-srv03 - http://34.107.115.225
+gcloud compute instances list | awk '{print $1" - http://"$5}' | grep srv0
+srv01 - http://35.204.155.147
+srv02 - http://34.91.153.6
+srv03 - http://35.204.235.170
+srv04 - http://35.204.167.116
+srv05 - http://34.90.28.145
+srv06 - http://34.91.21.217
 ```
 
-## DNS A records for EDU
+## DNS A records for srv
 - Create DNS records via cloudflare API
 
 ```console
 ./zbx-auto-reg-demo-gcp/scripts/create_dns_records.sh
 
-cli4 --post name='srv01' type=A content="35.246.211.200" /zones/:pfsense.cz/dns_records
-cli4 --post name='srv02' type=A content="34.89.152.77" /zones/:pfsense.cz/dns_records
-cli4 --post name='srv03' type=A content="34.107.115.225" /zones/:pfsense.cz/dns_records
+cli4 --post name='srv01' type=A content="35.204.155.147" /zones/:pfsense.cz/dns_records
+cli4 --post name='srv02' type=A content="34.91.153.6" /zones/:pfsense.cz/dns_records
+cli4 --post name='srv03' type=A content="35.204.235.170" /zones/:pfsense.cz/dns_records
+cli4 --post name='srv04' type=A content="35.204.167.116" /zones/:pfsense.cz/dns_records
+cli4 --post name='srv05' type=A content="34.90.28.145" /zones/:pfsense.cz/dns_records
+cli4 --post name='srv05' type=A content="34.91.21.217" /zones/:pfsense.cz/dns_records
 ```
 
 ## HTML list of VM
@@ -68,7 +74,6 @@ cli4 --post name='srv03' type=A content="34.107.115.225" /zones/:pfsense.cz/dns_
 ```console
 ./zbx-auto-reg-demo-gcp/scripts/create_html_list.sh
 ```
-
 ## To do
 
 - Zabbxi Auto-Registration - Ectrypted
