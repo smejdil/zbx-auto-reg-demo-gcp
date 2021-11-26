@@ -5,9 +5,9 @@
 # Lukas Maly <Iam@LukasMaly.NET> 22.1.2021
 #
 
-# FreeBSD 12
+# FreeBSD 13
 
-# Zabbix aggent 2
+# Zabbix aggent
 pkg install -y bash
 bash
 pkg install -y zabbix5-agent

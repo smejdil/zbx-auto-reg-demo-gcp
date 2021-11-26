@@ -2,47 +2,53 @@
 #
 # Create GCP Server VM
 #
-# Lukas Maly <Iam@LukasMaly.NET> 22.1.2021
+# Lukas Maly <Iam@LukasMaly.NET> 26.11.2021
 #
 
+REGION="europe-west6"
+ZONE="europe-west6-b"
+PROJECT="datascript-zabbix-edu"
+
 # GCP Set project Zabbix-EDU
-gcloud config set project zabbix-edu
+gcloud config set project ${PROJECT}
+gcloud config set compute/region ${REGION}
+gcloud config set compute/zone ${ZONE}
 
-# srv01 CentOS 8
-IMAGE_CENTOS8=`gcloud compute images list | grep centos-8 | awk '{print $1}'`
-gcloud compute instances create srv01 --image ${IMAGE_CENTOS8} --image-project=centos-cloud --zone=europe-west4-c --metadata-from-file startup-script=./zbx-auto-reg-demo-gcp/scripts/install-gcp-centos8.sh
-gcloud compute instances add-tags srv01 --tags=http-server --zone=europe-west4-c
-gcloud compute instances add-tags srv01 --tags=zabbix-agent --zone=europe-west4-c
+# srv01 RockyLinux 8
+IMAGE_ROCKYLINUX8=`gcloud compute images list | grep rocky-linux-8 | awk '{print $1}'`
+gcloud compute instances create srv01 --image ${IMAGE_ROCKYLINUX8} --image-project=rocky-linux-cloud --zone=${ZONE} --metadata-from-file startup-script=./zbx-auto-reg-demo-gcp/scripts/install-gcp-rockylinux8.sh
+gcloud compute instances add-tags srv01 --tags=http-server --zone=${ZONE}
+gcloud compute instances add-tags srv01 --tags=zabbix-agent --zone=${ZONE}
 
-# srv02 Debian 10
-IMAGE_DEBIAN10=`gcloud compute images list | grep debian-10 | awk '{print $1}'`
-gcloud compute instances create srv02 --image ${IMAGE_DEBIAN10} --image-project=debian-cloud --zone=europe-west4-c --metadata-from-file startup-script=./zbx-auto-reg-demo-gcp/scripts/install-gcp-debian10.sh
-gcloud compute instances add-tags srv02 --tags=http-server --zone=europe-west4-c
-gcloud compute instances add-tags srv02 --tags=zabbix-agent --zone=europe-west4-c
+# srv02 Debian 11
+IMAGE_DEBIAN11=`gcloud compute images list | grep debian-11 | awk '{print $1}'`
+gcloud compute instances create srv02 --image ${IMAGE_DEBIAN11} --image-project=debian-cloud --zone=${ZONE} --metadata-from-file startup-script=./zbx-auto-reg-demo-gcp/scripts/install-gcp-debian11.sh
+gcloud compute instances add-tags srv02 --tags=http-server --zone=${ZONE}
+gcloud compute instances add-tags srv02 --tags=zabbix-agent --zone=${ZONE}
 
 # srv03 Ubuntu 20.04
 IMAGE_UBUNTU2004=`gcloud compute images list | grep ubuntu-minimal-2004 | awk '{print $1}'`
-gcloud compute instances create srv03 --image ${IMAGE_UBUNTU2004} --image-project=ubuntu-os-cloud --zone=europe-west4-c --metadata-from-file startup-script=./zbx-auto-reg-demo-gcp/scripts/install-gcp-ubuntu2004.sh
-gcloud compute instances add-tags srv03 --tags=http-server --zone=europe-west4-c
-gcloud compute instances add-tags srv03 --tags=zabbix-agent --zone=europe-west4-c
+gcloud compute instances create srv03 --image ${IMAGE_UBUNTU2004} --image-project=ubuntu-os-cloud --zone=${ZONE} --metadata-from-file startup-script=./zbx-auto-reg-demo-gcp/scripts/install-gcp-ubuntu2004.sh
+gcloud compute instances add-tags srv03 --tags=http-server --zone=${ZONE}
+gcloud compute instances add-tags srv03 --tags=zabbix-agent --zone=${ZONE}
 
 # srv04 RHEL 8
 IMAGE_RHEL8=`gcloud compute images list | grep rhel-8-v | awk '{print $1}'`
-gcloud compute instances create srv04 --image ${IMAGE_RHEL8} --image-project=rhel-cloud --zone=europe-west4-c --metadata-from-file startup-script=./zbx-auto-reg-demo-gcp/scripts/install-gcp-rhel8.sh
-gcloud compute instances add-tags srv04 --tags=http-server --zone=europe-west4-c
-gcloud compute instances add-tags srv04 --tags=zabbix-agent --zone=europe-west4-c
+gcloud compute instances create srv04 --image ${IMAGE_RHEL8} --image-project=rhel-cloud --zone=${ZONE} --metadata-from-file startup-script=./zbx-auto-reg-demo-gcp/scripts/install-gcp-rhel8.sh
+gcloud compute instances add-tags srv04 --tags=http-server --zone=${ZONE}
+gcloud compute instances add-tags srv04 --tags=zabbix-agent --zone=${ZONE}
 
 # srv05 SLES
-IMAGE_SLES15=`gcloud compute images list | grep sles-15-sp2-v | awk '{print $1}'`
-gcloud compute instances create srv05 --image ${IMAGE_SLES15} --image-project=suse-cloud --zone=europe-west4-c --metadata-from-file startup-script=./zbx-auto-reg-demo-gcp/scripts/install-gcp-sles15.sh
-gcloud compute instances add-tags srv05 --tags=http-server --zone=europe-west4-c
-gcloud compute instances add-tags srv05 --tags=zabbix-agent --zone=europe-west4-c
+IMAGE_SLES15=`gcloud compute images list | grep sles-15-sp3-v | awk '{print $1}'`
+gcloud compute instances create srv05 --image ${IMAGE_SLES15} --image-project=suse-cloud --zone=${ZONE} --metadata-from-file startup-script=./zbx-auto-reg-demo-gcp/scripts/install-gcp-sles15.sh
+gcloud compute instances add-tags srv05 --tags=http-server --zone=${ZONE}
+gcloud compute instances add-tags srv05 --tags=zabbix-agent --zone=${ZONE}
 
-# srv06 FreeBSD 12
-IMAGE_FBSD=`gcloud compute images list --project freebsd-org-cloud-dev --no-standard-images | grep -i 12-2-release-amd64 | awk '{print $1}'`;
-gcloud compute instances create srv06 --image ${IMAGE_FBSD} --image-project=freebsd-org-cloud-dev --zone=europe-west4-c --metadata-from-file startup-script=./zbx-auto-reg-demo-gcp/scripts/install-gcp-fbsd12.sh
-gcloud compute instances add-tags srv06 --tags=http-server --zone=europe-west4-c
-gcloud compute instances add-tags srv06 --tags=zabbix-agent --zone=europe-west4-c
+# srv06 FreeBSD 13
+IMAGE_FBSD=`gcloud compute images list --project freebsd-org-cloud-dev --no-standard-images | grep -i freebsd-13-0-release-amd64 | awk '{print $1}'`;
+gcloud compute instances create srv06 --image ${IMAGE_FBSD} --image-project=freebsd-org-cloud-dev --zone=${ZONE} --metadata-from-file startup-script=./zbx-auto-reg-demo-gcp/scripts/install-gcp-fbsd13.sh
+gcloud compute instances add-tags srv06 --tags=http-server --zone=${ZONE}
+gcloud compute instances add-tags srv06 --tags=zabbix-agent --zone=${ZONE}
 
 # gcloud compute regions list | grep europe-west
 
