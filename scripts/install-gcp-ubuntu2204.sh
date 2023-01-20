@@ -2,20 +2,22 @@
 #
 # Post-deploy script
 #
-# Lukas Maly <Iam@LukasMaly.NET> 22.1.2021
+# Lukas Maly <Iam@LukasMaly.Name> 20.1.2023
 #
 
-# RockyLinux 8
+# Ubuntu 22.04
 
 # Zabbix aggent 2
 cd /tmp
-rpm -Uvh https://repo.zabbix.com/zabbix/5.0/rhel/8/x86_64/zabbix-release-5.0-1.el8.noarch.rpm
-dnf clean all
-dnf -y install zabbix-agent2
+apt -y install wget
+wget https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.0-4%2Bubuntu22.04_all.deb
+dpkg -i zabbix-release_6.0-4+ubuntu22.04_all.deb
+apt update
+apt -y install zabbix-agent2
 cp /etc/zabbix/zabbix_agent2.conf /etc/zabbix/zabbix_agent2.conf-orig
 sed -i 's/Hostname=Zabbix server/#Hostname=Zabbix server/g' /etc/zabbix/zabbix_agent2.conf
-sed -i 's/Server=127.0.0.1/Server=zabbix.pfsense.cz/g' /etc/zabbix/zabbix_agent2.conf
-sed -i 's/ServerActive=127.0.0.1/ServerActive=zabbix.pfsense.cz/g' /etc/zabbix/zabbix_agent2.conf
+sed -i 's/Server=127.0.0.1/Server=enceladus.pfsense.cz/g' /etc/zabbix/zabbix_agent2.conf
+sed -i 's/ServerActive=127.0.0.1/ServerActive=enceladus.pfsense.cz/g' /etc/zabbix/zabbix_agent2.conf
 sed -i 's/# Plugins.SystemRun.LogRemoteCommands=0/Plugins.SystemRun.LogRemoteCommands=1/g' /etc/zabbix/zabbix_agent2.conf
 sed -i 's/# DenyKey=system.run\[\*\]/AllowKey=system.run\[\*\]/g' /etc/zabbix/zabbix_agent2.conf
 sed -i 's/# HostMetadata=/HostMetadata=GCPLinux/g' /etc/zabbix/zabbix_agent2.conf
@@ -32,8 +34,8 @@ systemctl enable zabbix-agent2
 
 # HTTPd Apache
 
-dnf -y install httpd
-systemctl restart httpd
-systemctl enable httpd
+apt install -y apache2
+systemctl restart apache2
+systemctl enable apache2
 
 # EOF

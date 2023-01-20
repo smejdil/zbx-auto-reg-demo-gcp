@@ -2,7 +2,7 @@
 #
 # Create GCP Server VM
 #
-# Lukas Maly <Iam@LukasMaly.NET> 22.1.2021
+# Lukas Maly <Iam@LukasMaly.Name> 20.1.2023
 #
 
 REGION="europe-west6"

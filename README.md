@@ -1,6 +1,6 @@
 ## Deploy servers on GCP for demo Zabbix Autoregistration
 
-This small project is used for install Linux servers with Zabbix 5.0 LTS Agents 2 and Auto-Registration to some Zabbix Server - Demo for Zabbix EDU
+This small project is used for install Linux servers with Zabbix 6.0 LTS Agents 2 and Auto-Registration to some Zabbix Server - Demo for Zabbix EDU
 
 ## Dependencies
 
@@ -12,11 +12,11 @@ By Google Cloud SDK is intalled servers srv0X. After instalation run scripts for
 
 ## Features
 
-- Install and configure srv01 - RockyLinux 8
+- Install and configure srv01 - RockyLinux 9
 - Install and configure srv02 - Debian 11
-- Install and configure srv03 - Ubuntu 20.04
-- Install and configure srv04 - RHEL 8
-- Install and configure srv05 - SLES 15 sp3
+- Install and configure srv03 - Ubuntu 22.04
+- Install and configure srv04 - RHEL 9
+- Install and configure srv05 - SLES 15 sp4
 - Install and configure srv06 - FreeBSD 13
 - Install and configure zabbix_agent2
 - Install and configure Apache httpd
@@ -77,4 +77,6 @@ cli4 --post name='srv05' type=A content="34.91.21.217" /zones/:pfsense.cz/dns_re
 ## To do
 
 - Zabbxi Auto-Registration - Ectrypted
+- Ansible configuration  
 - Other ...
+y
