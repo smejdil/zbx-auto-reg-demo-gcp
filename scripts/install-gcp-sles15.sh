@@ -9,6 +9,12 @@
 
 zypper install -y git
 git clone https://github.com/smejdil/zbx-auto-reg-demo-gcp.git
+SUSEConnect -p PackageHub/15.4/x86_64
+zypper install -y ansible
+ansible-galaxy collection install community.zabbix
+cd /root/zbx-auto-reg-demo-gcp/ansible/
+#ansible-playbook zabbix-agent.yml
+# Fuck SLES !!!
 
 # Zabbix aggent 2
 cd /tmp
