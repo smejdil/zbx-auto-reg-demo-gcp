@@ -76,6 +76,6 @@ cli4 --post name='srv05' type=A content="34.91.21.217" /zones/:pfsense.cz/dns_re
 ```
 ## To do
 
-- Zabbxi Auto-Registration - Ectrypted
-- Ansible configuration  
+- Zabbxi Auto-Registration with Enctrypted comunication
+- Ansible configuration
 - Other ...

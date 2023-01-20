@@ -7,7 +7,8 @@
 
 # FreeBSD 13
 
-git clone https://github.com/smejdil/zbx-auto-reg-demo-gcp.git
+pkg install -y git
+cd /root/ && git clone https://github.com/smejdil/zbx-auto-reg-demo-gcp.git
 
 # Zabbix aggent
 pkg install -y bash
