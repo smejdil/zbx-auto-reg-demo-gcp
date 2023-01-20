@@ -1,0 +1,15 @@
+zabbix_agent_version: 6.0
+zabbix_repo: zabbix
+zabbix_agent2: true
+
+zabbix_agent2_server: enceladus.pfsense.cz
+zabbix_agent2_serveractive: enceladus.pfsense.cz
+
+zabbix_url: https://enceladus.pfsense.cz
+zabbix_api_user: Admin
+zabbix_api_pass: zabbix
+zabbix_api_create_hosts: true
+
+zabbix_install_pip_packages: true
+zabbix_agent_description: Zabbix Demo Zabbix-EDU
+zabbix_agent_inventory_mode: automatic

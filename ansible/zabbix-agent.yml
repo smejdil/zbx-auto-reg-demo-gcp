@@ -1,0 +1,8 @@
+- name: Install Zabbix agent
+  hosts: localhost
+  collections:
+    - community.zabbix
+    
+  roles:
+    - role: zabbix_agent
+      zabbix_agent_server: enceladus.pfsense.cz
