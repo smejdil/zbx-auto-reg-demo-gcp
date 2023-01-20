@@ -1,0 +1,2053 @@
+zabbix_export:
+  version: '6.0'
+  date: '2023-01-20T20:21:29Z'
+  groups:
+    -
+      uuid: 28b45d38adf241578a8480d372eeea95
+      name: Public/Google
+  templates:
+    -
+      uuid: 985c14da69134376a99f35d6ffbf060c
+      template: 'Template Google'
+      name: 'Template Google'
+      templates:
+        -
+          name: 'Template Google App HTTP Service'
+        -
+          name: 'Template Google ICMP Ping'
+        -
+          name: 'Template Google OS Linux'
+      groups:
+        -
+          name: Public/Google
+    -
+      uuid: 5ab0998e348b434594160808ff2e87e3
+      template: 'Template Google App HTTP Service'
+      name: 'Template Google App HTTP Service'
+      groups:
+        -
+          name: Public/Google
+      items:
+        -
+          uuid: b76e3c799dcb45769c08e2b7069f6504
+          name: 'HTTP service is running'
+          type: SIMPLE
+          key: 'net.tcp.service[http]'
+          delay: 10s
+          history: 1w
+          valuemap:
+            name: 'Service state'
+          tags:
+            -
+              tag: Application
+              value: 'HTTP service'
+          triggers:
+            -
+              uuid: d26789f0e9e34c4c97ae950911f48a43
+              expression: 'max(/Template Google App HTTP Service/net.tcp.service[http],#3)=0'
+              name: 'HTTP service is down on {HOST.NAME}'
+              priority: AVERAGE
+              tags:
+                -
+                  tag: Service
+                  value: HTTP
+                -
+                  tag: Software
+                  value: Apache
+      valuemaps:
+        -
+          uuid: 838a43eed81040859b2a035c9f1993ed
+          name: 'Service state'
+          mappings:
+            -
+              value: '0'
+              newvalue: Down
+            -
+              value: '1'
+              newvalue: Up
+    -
+      uuid: e5e55f2668d9409f8b0d9f169bab587f
+      template: 'Template Google App Zabbix Agent'
+      name: 'Template Google App Zabbix Agent'
+      groups:
+        -
+          name: Public/Google
+      items:
+        -
+          uuid: 928578c5be6c4941916a62cdd17ae76e
+          name: 'Host name of zabbix_agentd running'
+          key: agent.hostname
+          delay: 10s
+          history: 1w
+          trends: '0'
+          value_type: CHAR
+          tags:
+            -
+              tag: Application
+              value: 'Zabbix agent'
+          triggers:
+            -
+              uuid: e1b366bef53e40c2a9d1a3a330fb26c7
+              expression: '(last(/Template Google App Zabbix Agent/agent.hostname,#1)<>last(/Template Google App Zabbix Agent/agent.hostname,#2))>0'
+              name: 'Host name of zabbix_agentd was changed on {HOST.NAME}'
+              priority: INFO
+        -
+          uuid: 50d9091cf3644c2382fc6a121c0212e7
+          name: 'Agent ping'
+          key: agent.ping
+          delay: 10s
+          history: 1w
+          description: 'The agent always returns 1 for this item. It could be used in combination with nodata() for availability check.'
+          valuemap:
+            name: 'Zabbix agent ping status'
+          tags:
+            -
+              tag: Application
+              value: 'Zabbix agent'
+          triggers:
+            -
+              uuid: c012d54af2e54cedbff311ea9380f2a3
+              expression: 'nodata(/Template Google App Zabbix Agent/agent.ping,5m)=1'
+              name: 'Zabbix agent on {HOST.NAME} is unreachable for 5 minutes'
+              priority: AVERAGE
+        -
+          uuid: 12dc3ff6237249c69e68d59c50c541c6
+          name: 'Version of zabbix_agent(d) running'
+          key: agent.version
+          delay: 10s
+          history: 1w
+          trends: '0'
+          value_type: CHAR
+          tags:
+            -
+              tag: Application
+              value: 'Zabbix agent'
+          triggers:
+            -
+              uuid: c7c96cf7f7ac4bddae769fc6caa606c9
+              expression: '(last(/Template Google App Zabbix Agent/agent.version,#1)<>last(/Template Google App Zabbix Agent/agent.version,#2))>0'
+              name: 'Version of zabbix_agent(d) was changed on {HOST.NAME}'
+              priority: INFO
+      valuemaps:
+        -
+          uuid: 94eb137d4e684d3a824bb693cef1d3a1
+          name: 'Zabbix agent ping status'
+          mappings:
+            -
+              value: '1'
+              newvalue: Up
+    -
+      uuid: 5934872002374eefa024f649d828f06f
+      template: 'Template Google FBSD'
+      name: 'Template Google FBSD'
+      templates:
+        -
+          name: 'Template Google App HTTP Service'
+        -
+          name: 'Template Google ICMP Ping'
+        -
+          name: 'Template Google OS FreeBSD'
+      groups:
+        -
+          name: Public/Google
+      dashboards:
+        -
+          uuid: 9292d2e573bf4d7abe29ceed3144b6bb
+          name: 'System performance'
+          pages:
+            - {  }
+    -
+      uuid: cf5bc28feb114668a27f05a65cbcc5be
+      template: 'Template Google ICMP Ping'
+      name: 'Template Google ICMP Ping'
+      description: 'Template Module ICMP Ping version: 0.15'
+      groups:
+        -
+          name: Public/Google
+      items:
+        -
+          uuid: 79c0224a0e7e4aeca10225192aac634f
+          name: 'ICMP ping'
+          type: SIMPLE
+          key: icmpping
+          delay: 10s
+          history: 1w
+          valuemap:
+            name: 'Service state'
+          tags:
+            -
+              tag: Application
+              value: Status
+          triggers:
+            -
+              uuid: 4e9fdb359a15493c96f525d3e72bca78
+              expression: 'max(/Template Google ICMP Ping/icmpping,#3)=0'
+              name: 'Unavailable by ICMP ping'
+              priority: HIGH
+              description: |
+                Last value: {ITEM.LASTVALUE1}.
+                Last three attempts returned timeout.  Please check device connectivity.
+              tags:
+                -
+                  tag: Proto
+                  value: ICMP
+        -
+          uuid: fdbbec73bb7a4253841f763445ef46e4
+          name: 'ICMP loss'
+          type: SIMPLE
+          key: icmppingloss
+          delay: 10s
+          history: 1w
+          value_type: FLOAT
+          units: '%'
+          tags:
+            -
+              tag: Application
+              value: Status
+          triggers:
+            -
+              uuid: aebb3fa4ff28439b9d2659247bdbb160
+              expression: 'min(/Template Google ICMP Ping/icmppingloss,1m)>{$ICMP_LOSS_WARN} and min(/Template Google ICMP Ping/icmppingloss,1m)<100'
+              name: 'High ICMP ping loss'
+              priority: WARNING
+              description: 'Last value: {ITEM.LASTVALUE1}.'
+              dependencies:
+                -
+                  name: 'Unavailable by ICMP ping'
+                  expression: 'max(/Template Google ICMP Ping/icmpping,#3)=0'
+        -
+          uuid: 8a34da97974d41a6bedca9b1d2d081a3
+          name: 'ICMP response time'
+          type: SIMPLE
+          key: icmppingsec
+          delay: 10s
+          history: 1w
+          value_type: FLOAT
+          units: s
+          tags:
+            -
+              tag: Application
+              value: Status
+          triggers:
+            -
+              uuid: 434c0340af914afb8df6b7494badf162
+              expression: 'avg(/Template Google ICMP Ping/icmppingsec,1m)>{$ICMP_RESPONSE_TIME_WARN}'
+              name: 'High ICMP ping response time'
+              priority: WARNING
+              description: 'Last value: {ITEM.LASTVALUE1}.'
+              dependencies:
+                -
+                  name: 'High ICMP ping loss'
+                  expression: 'min(/Template Google ICMP Ping/icmppingloss,1m)>{$ICMP_LOSS_WARN} and min(/Template Google ICMP Ping/icmppingloss,1m)<100'
+                -
+                  name: 'Unavailable by ICMP ping'
+                  expression: 'max(/Template Google ICMP Ping/icmpping,#3)=0'
+      macros:
+        -
+          macro: '{$ICMP_LOSS_WARN}'
+          value: '20'
+        -
+          macro: '{$ICMP_RESPONSE_TIME_WARN}'
+          value: '0.15'
+      valuemaps:
+        -
+          uuid: d6a4401eaaf9469cb5131b63f0e28643
+          name: 'Service state'
+          mappings:
+            -
+              value: '0'
+              newvalue: Down
+            -
+              value: '1'
+              newvalue: Up
+    -
+      uuid: 0d6a50a138354bdfa2da4602b90b774f
+      template: 'Template Google OS FreeBSD'
+      name: 'Template Google OS FreeBSD'
+      templates:
+        -
+          name: 'Template Google App Zabbix Agent'
+      groups:
+        -
+          name: Public/Google
+      items:
+        -
+          uuid: 306406aee3e540ad8e8bd7d2f8c117fa
+          name: 'Maximum number of opened files'
+          key: kernel.maxfiles
+          delay: 10s
+          history: 1w
+          description: 'It could be increased by using sysctrl utility or modifying file /etc/sysctl.conf.'
+          tags:
+            -
+              tag: Application
+              value: OS
+          triggers:
+            -
+              uuid: 8e45340dc576497dbcb84290bd1eba3b
+              expression: 'last(/Template Google OS FreeBSD/kernel.maxfiles)<1024'
+              name: 'Configured max number of opened files is too low on {HOST.NAME}'
+              priority: INFO
+        -
+          uuid: 89ef8a29e9664dfaa203047fb13ec3f4
+          name: 'Maximum number of processes'
+          key: kernel.maxproc
+          delay: 10s
+          history: 1w
+          description: 'It could be increased by using sysctrl utility or modifying file /etc/sysctl.conf.'
+          tags:
+            -
+              tag: Application
+              value: OS
+          triggers:
+            -
+              uuid: 83b39bf7e1f44f6e898f5a08d5ce4955
+              expression: 'last(/Template Google OS FreeBSD/kernel.maxproc)<256'
+              name: 'Configured max number of processes is too low on {HOST.NAME}'
+              priority: INFO
+        -
+          uuid: 15be6fee9e1e43caad73edc2d1f334e5
+          name: 'Number of running processes'
+          key: 'proc.num[,,run]'
+          delay: 10s
+          history: 1w
+          description: 'Number of processes in running state.'
+          tags:
+            -
+              tag: Application
+              value: Processes
+          triggers:
+            -
+              uuid: b06dd1ac842c4e6fa338b7fbbbfa297e
+              expression: 'avg(/Template Google OS FreeBSD/proc.num[,,run],5m)>30'
+              name: 'Too many processes running on {HOST.NAME}'
+              priority: WARNING
+        -
+          uuid: 3e7504cddc96485d97a10726ae0dc268
+          name: 'Number of processes'
+          key: 'proc.num[]'
+          delay: 10s
+          history: 1w
+          description: 'Total number of processes in any state.'
+          tags:
+            -
+              tag: Application
+              value: Processes
+          triggers:
+            -
+              uuid: 93b8395c043d4fe4bb6a354e17903995
+              expression: 'avg(/Template Google OS FreeBSD/proc.num[],5m)>300'
+              name: 'Too many processes on {HOST.NAME}'
+              priority: WARNING
+        -
+          uuid: bc4fb13c06d94159b4fdadc48a59dac7
+          name: 'Host boot time'
+          key: system.boottime
+          delay: 10s
+          history: 1w
+          units: unixtime
+          tags:
+            -
+              tag: Application
+              value: General
+            -
+              tag: Application
+              value: OS
+        -
+          uuid: 0034bd75dea542db9f2a3bc57590b602
+          name: 'Interrupts per second'
+          key: system.cpu.intr
+          delay: 10s
+          history: 1w
+          units: ips
+          preprocessing:
+            -
+              type: CHANGE_PER_SECOND
+              parameters:
+                - ''
+          tags:
+            -
+              tag: Application
+              value: CPU
+            -
+              tag: Application
+              value: Performance
+        -
+          uuid: 724fd6b04bb9406fab60b1ec09b5de8d
+          name: 'Processor load (1 min average per core)'
+          key: 'system.cpu.load[percpu,avg1]'
+          delay: 10s
+          history: 1w
+          value_type: FLOAT
+          description: 'The processor load is calculated as system CPU load divided by number of CPU cores.'
+          tags:
+            -
+              tag: Application
+              value: CPU
+            -
+              tag: Application
+              value: Performance
+          triggers:
+            -
+              uuid: 6f63294f3b994b398c3c1749c58c3009
+              expression: 'avg(/Template Google OS FreeBSD/system.cpu.load[percpu,avg1],5m)>5'
+              name: 'Processor load is too high on {HOST.NAME}'
+              priority: WARNING
+        -
+          uuid: 62c9d864d0e24700ac74f9dafd16c0bf
+          name: 'Processor load (5 min average per core)'
+          key: 'system.cpu.load[percpu,avg5]'
+          delay: 10s
+          history: 1w
+          value_type: FLOAT
+          description: 'The processor load is calculated as system CPU load divided by number of CPU cores.'
+          tags:
+            -
+              tag: Application
+              value: CPU
+            -
+              tag: Application
+              value: Performance
+        -
+          uuid: bb8094a68d6c46339cc26a298a9f0850
+          name: 'Processor load (15 min average per core)'
+          key: 'system.cpu.load[percpu,avg15]'
+          delay: 10s
+          history: 1w
+          value_type: FLOAT
+          description: 'The processor load is calculated as system CPU load divided by number of CPU cores.'
+          tags:
+            -
+              tag: Application
+              value: CPU
+            -
+              tag: Application
+              value: Performance
+        -
+          uuid: cc9f762d78694a13a06ba5f214ed6bdc
+          name: 'Context switches per second'
+          key: system.cpu.switches
+          delay: 10s
+          history: 1w
+          units: sps
+          preprocessing:
+            -
+              type: CHANGE_PER_SECOND
+              parameters:
+                - ''
+          tags:
+            -
+              tag: Application
+              value: CPU
+            -
+              tag: Application
+              value: Performance
+        -
+          uuid: 43cda01c1250499cb506088051de8b3d
+          name: 'CPU idle time'
+          key: 'system.cpu.util[,idle]'
+          delay: 10s
+          history: 1w
+          value_type: FLOAT
+          units: '%'
+          description: 'The time the CPU has spent doing nothing.'
+          tags:
+            -
+              tag: Application
+              value: CPU
+            -
+              tag: Application
+              value: Performance
+        -
+          uuid: 2041f4f77adf43b8b9e4fb384446c8d9
+          name: 'CPU interrupt time'
+          key: 'system.cpu.util[,interrupt]'
+          delay: 10s
+          history: 1w
+          value_type: FLOAT
+          units: '%'
+          description: 'The amount of time the CPU has been servicing hardware interrupts.'
+          tags:
+            -
+              tag: Application
+              value: CPU
+            -
+              tag: Application
+              value: Performance
+        -
+          uuid: 4c2baed2251a400798b43c9cdbd6811b
+          name: 'CPU nice time'
+          key: 'system.cpu.util[,nice]'
+          delay: 10s
+          history: 1w
+          value_type: FLOAT
+          units: '%'
+          description: 'The time the CPU has spent running users'' processes that have been niced.'
+          tags:
+            -
+              tag: Application
+              value: CPU
+            -
+              tag: Application
+              value: Performance
+        -
+          uuid: f5682f11fd664dbebdf1bed4dcee62bd
+          name: 'CPU system time'
+          key: 'system.cpu.util[,system]'
+          delay: 10s
+          history: 1w
+          value_type: FLOAT
+          units: '%'
+          description: 'The time the CPU has spent running the kernel and its processes.'
+          tags:
+            -
+              tag: Application
+              value: CPU
+            -
+              tag: Application
+              value: Performance
+        -
+          uuid: 047635ec24a14240bb29c496382830f3
+          name: 'CPU user time'
+          key: 'system.cpu.util[,user]'
+          delay: 10s
+          history: 1w
+          value_type: FLOAT
+          units: '%'
+          description: 'The time the CPU has spent running users'' processes that are not niced.'
+          tags:
+            -
+              tag: Application
+              value: CPU
+            -
+              tag: Application
+              value: Performance
+        -
+          uuid: 8aa61ac6db904c1880f4c520c3f4e19c
+          name: 'Host name'
+          key: system.hostname
+          delay: 10s
+          history: 1w
+          trends: '0'
+          value_type: CHAR
+          description: 'System host name.'
+          inventory_link: NAME
+          tags:
+            -
+              tag: Application
+              value: General
+            -
+              tag: Application
+              value: OS
+          triggers:
+            -
+              uuid: 4cca83d633ad445faea7d0572bfb815c
+              expression: '(last(/Template Google OS FreeBSD/system.hostname,#1)<>last(/Template Google OS FreeBSD/system.hostname,#2))>0'
+              name: 'Hostname was changed on {HOST.NAME}'
+              priority: INFO
+        -
+          uuid: 250fa8c4acea4403ac2b41bd058f347d
+          name: 'Host local time'
+          key: system.localtime
+          delay: 10s
+          history: 1w
+          units: unixtime
+          tags:
+            -
+              tag: Application
+              value: General
+            -
+              tag: Application
+              value: OS
+        -
+          uuid: 82c15b4f98f2417884a8b6d7b25ddce6
+          name: 'System arch'
+          key: system.sw.arch
+          delay: 10s
+          history: 1w
+          trends: '0'
+          value_type: CHAR
+          inventory_link: HW_ARCH
+          tags:
+            -
+              tag: Application
+              value: OS
+        -
+          uuid: 5bfc27115e604d88b7a58663f50d809b
+          name: 'Free swap space'
+          key: 'system.swap.size[,free]'
+          delay: 10s
+          history: 1w
+          units: B
+          tags:
+            -
+              tag: Application
+              value: Memory
+        -
+          uuid: 5f5cd108c5a744dfac9b615f8c77418b
+          name: 'Free swap space in %'
+          key: 'system.swap.size[,pfree]'
+          delay: 10s
+          history: 1w
+          value_type: FLOAT
+          units: '%'
+          tags:
+            -
+              tag: Application
+              value: Memory
+          triggers:
+            -
+              uuid: c0eb981ca75244c2925ba36d9c579208
+              expression: 'last(/Template Google OS FreeBSD/system.swap.size[,pfree])<50'
+              name: 'Lack of free swap space on {HOST.NAME}'
+              priority: WARNING
+              description: 'It probably means that the systems requires more physical memory.'
+        -
+          uuid: 684c45fd4d9e4ae5b3f4581fdecd0409
+          name: 'Total swap space'
+          key: 'system.swap.size[,total]'
+          delay: 10s
+          history: 1w
+          units: B
+          tags:
+            -
+              tag: Application
+              value: Memory
+        -
+          uuid: d958ce66a9a84e72b4a37162583d828b
+          name: 'System information'
+          key: system.uname
+          delay: 10s
+          history: 1w
+          trends: '0'
+          value_type: CHAR
+          description: 'The information as normally returned by ''uname -a''.'
+          inventory_link: OS
+          tags:
+            -
+              tag: Application
+              value: General
+            -
+              tag: Application
+              value: OS
+          triggers:
+            -
+              uuid: 02a229e1db4546ea928c49360edf4214
+              expression: '(last(/Template Google OS FreeBSD/system.uname,#1)<>last(/Template Google OS FreeBSD/system.uname,#2))>0'
+              name: 'Host information was changed on {HOST.NAME}'
+              priority: INFO
+        -
+          uuid: 8119d44902e840b4936b2d5e2686c88a
+          name: 'System uptime'
+          key: system.uptime
+          delay: 10s
+          history: 1w
+          units: uptime
+          tags:
+            -
+              tag: Application
+              value: General
+            -
+              tag: Application
+              value: OS
+          triggers:
+            -
+              uuid: 62535adf8c254fd389f3aa597fd2088b
+              expression: 'change(/Template Google OS FreeBSD/system.uptime)<0'
+              name: '{HOST.NAME} has just been restarted'
+              priority: INFO
+        -
+          uuid: ca59ca6bf8ba452e918242e665268541
+          name: 'Number of logged in users'
+          key: system.users.num
+          delay: 10s
+          history: 1w
+          description: 'Number of users who are currently logged in.'
+          tags:
+            -
+              tag: Application
+              value: OS
+            -
+              tag: Application
+              value: Security
+        -
+          uuid: 79d9935f6c2b486093033712d40b1623
+          name: 'Checksum of /etc/passwd'
+          key: 'vfs.file.cksum[/etc/passwd]'
+          delay: 10s
+          history: 1w
+          tags:
+            -
+              tag: Application
+              value: Security
+          triggers:
+            -
+              uuid: 0352959f69b24a13a8609beb5b451969
+              expression: '(last(/Template Google OS FreeBSD/vfs.file.cksum[/etc/passwd],#1)<>last(/Template Google OS FreeBSD/vfs.file.cksum[/etc/passwd],#2))>0'
+              name: '/etc/passwd has been changed on {HOST.NAME}'
+              priority: WARNING
+        -
+          uuid: 1253e5f0ae4c49e28a95567c5d987d34
+          name: 'Available memory'
+          key: 'vm.memory.size[available]'
+          delay: 10s
+          history: 1w
+          units: B
+          description: 'Available memory is defined as free+cached+buffers memory.'
+          tags:
+            -
+              tag: Application
+              value: Memory
+          triggers:
+            -
+              uuid: d3f8756ea9974c4faa299f37567872dc
+              expression: 'last(/Template Google OS FreeBSD/vm.memory.size[available])<20M'
+              name: 'Lack of available memory on server {HOST.NAME}'
+              priority: AVERAGE
+        -
+          uuid: 91c069c4e7334112b725c0023a49a6e5
+          name: 'Total memory'
+          key: 'vm.memory.size[total]'
+          delay: 10s
+          history: 1w
+          units: B
+          tags:
+            -
+              tag: Application
+              value: Memory
+      discovery_rules:
+        -
+          uuid: a299a533388b4c54bbe2951a990c32ff
+          name: 'Network interface discovery'
+          key: net.if.discovery
+          filter:
+            conditions:
+              -
+                macro: '{#IFNAME}'
+                value: '@Network interfaces for discovery'
+                formulaid: A
+          description: 'Discovery of network interfaces as defined in global regular expression "Network interfaces for discovery".'
+          item_prototypes:
+            -
+              uuid: 7a86fd1aeb0846bdab336db2a01a22f9
+              name: 'Incoming network traffic on {#IFNAME}'
+              key: 'net.if.in[{#IFNAME}]'
+              history: 1w
+              units: bps
+              preprocessing:
+                -
+                  type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '8'
+              tags:
+                -
+                  tag: Application
+                  value: 'Network interfaces'
+            -
+              uuid: 17110d2cb54f4137b23650c57f7e1328
+              name: 'Outgoing network traffic on {#IFNAME}'
+              key: 'net.if.out[{#IFNAME}]'
+              history: 1w
+              units: bps
+              preprocessing:
+                -
+                  type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '8'
+              tags:
+                -
+                  tag: Application
+                  value: 'Network interfaces'
+          graph_prototypes:
+            -
+              uuid: 7dfc5092ed38480cbe9ef718562760d9
+              name: 'Network traffic on {#IFNAME}'
+              ymin_type_1: FIXED
+              graph_items:
+                -
+                  drawtype: GRADIENT_LINE
+                  color: 00AA00
+                  item:
+                    host: 'Template Google OS FreeBSD'
+                    key: 'net.if.in[{#IFNAME}]'
+                -
+                  sortorder: '1'
+                  drawtype: GRADIENT_LINE
+                  color: 3333FF
+                  item:
+                    host: 'Template Google OS FreeBSD'
+                    key: 'net.if.out[{#IFNAME}]'
+        -
+          uuid: f299c3ef881249898706c9e257e23185
+          name: 'Mounted filesystem discovery'
+          key: vfs.fs.discovery
+          filter:
+            conditions:
+              -
+                macro: '{#FSTYPE}'
+                value: '@File systems for discovery'
+                formulaid: A
+          description: 'Discovery of file systems of different types as defined in global regular expression "File systems for discovery".'
+          item_prototypes:
+            -
+              uuid: d61d41cd00904dbcacd1e61ae88e3485
+              name: 'Free inodes on {#FSNAME} (percentage)'
+              key: 'vfs.fs.inode[{#FSNAME},pfree]'
+              history: 1w
+              value_type: FLOAT
+              units: '%'
+              tags:
+                -
+                  tag: Application
+                  value: Filesystems
+              trigger_prototypes:
+                -
+                  uuid: 1a49a0cf823a4338893db88b2caebba2
+                  expression: 'last(/Template Google OS FreeBSD/vfs.fs.inode[{#FSNAME},pfree])<20'
+                  name: 'Free inodes is less than 20% on volume {#FSNAME}'
+                  priority: WARNING
+            -
+              uuid: 2c91e0b6a47f4daaa0bff66d80a68c39
+              name: 'Free disk space on {#FSNAME}'
+              key: 'vfs.fs.size[{#FSNAME},free]'
+              history: 1w
+              units: B
+              tags:
+                -
+                  tag: Application
+                  value: Filesystems
+            -
+              uuid: 90630816d89c4aac939e3823dc522bae
+              name: 'Free disk space on {#FSNAME} (percentage)'
+              key: 'vfs.fs.size[{#FSNAME},pfree]'
+              history: 1w
+              value_type: FLOAT
+              units: '%'
+              tags:
+                -
+                  tag: Application
+                  value: Filesystems
+              trigger_prototypes:
+                -
+                  uuid: 5579c1d5531b4c4ebba10d5ac038c467
+                  expression: 'last(/Template Google OS FreeBSD/vfs.fs.size[{#FSNAME},pfree])<20'
+                  name: 'Free disk space is less than 20% on volume {#FSNAME}'
+                  priority: WARNING
+            -
+              uuid: 8b842caa12264bbe8c27bd2468ad93c7
+              name: 'Total disk space on {#FSNAME}'
+              key: 'vfs.fs.size[{#FSNAME},total]'
+              history: 1w
+              units: B
+              tags:
+                -
+                  tag: Application
+                  value: Filesystems
+            -
+              uuid: 32859eec814e45eb98890c1c1a311931
+              name: 'Used disk space on {#FSNAME}'
+              key: 'vfs.fs.size[{#FSNAME},used]'
+              history: 1w
+              units: B
+              tags:
+                -
+                  tag: Application
+                  value: Filesystems
+          graph_prototypes:
+            -
+              uuid: 6a2fc6a0a88644008ddd2cba4e019e5d
+              name: 'Disk space usage {#FSNAME}'
+              width: '600'
+              height: '340'
+              show_work_period: 'NO'
+              show_triggers: 'NO'
+              type: PIE
+              show_3d: 'YES'
+              graph_items:
+                -
+                  color: C80000
+                  type: GRAPH_SUM
+                  item:
+                    host: 'Template Google OS FreeBSD'
+                    key: 'vfs.fs.size[{#FSNAME},total]'
+                -
+                  sortorder: '1'
+                  color: 00C800
+                  item:
+                    host: 'Template Google OS FreeBSD'
+                    key: 'vfs.fs.size[{#FSNAME},free]'
+      dashboards:
+        -
+          uuid: 72bd5bb2cea44c93b20a1f8d5db2f908
+          name: 'System performance'
+          pages:
+            -
+              widgets:
+                -
+                  type: GRAPH_CLASSIC
+                  width: '12'
+                  height: '5'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: source_type
+                      value: '0'
+                    -
+                      type: GRAPH
+                      name: graphid
+                      value:
+                        host: 'Template Google OS FreeBSD'
+                        name: 'CPU load'
+                -
+                  type: GRAPH_CLASSIC
+                  x: '12'
+                  width: '12'
+                  height: '5'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: source_type
+                      value: '0'
+                    -
+                      type: GRAPH
+                      name: graphid
+                      value:
+                        host: 'Template Google OS FreeBSD'
+                        name: 'CPU utilization'
+                -
+                  type: GRAPH_CLASSIC
+                  'y': '5'
+                  width: '12'
+                  height: '7'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: source_type
+                      value: '0'
+                    -
+                      type: GRAPH
+                      name: graphid
+                      value:
+                        host: 'Template Google OS FreeBSD'
+                        name: 'Memory usage'
+                -
+                  type: GRAPH_CLASSIC
+                  x: '12'
+                  'y': '5'
+                  width: '12'
+                  height: '7'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: source_type
+                      value: '0'
+                    -
+                      type: GRAPH
+                      name: graphid
+                      value:
+                        host: 'Template Google OS FreeBSD'
+                        name: 'Swap usage'
+    -
+      uuid: f5fa76fac5b240358980050b879bf497
+      template: 'Template Google OS Linux'
+      name: 'Template Google OS Linux'
+      templates:
+        -
+          name: 'Template Google App Zabbix Agent'
+      groups:
+        -
+          name: Public/Google
+      items:
+        -
+          uuid: 8b2488da94fd412db98b3cd3055efb48
+          name: 'Maximum number of opened files'
+          key: kernel.maxfiles
+          delay: 10s
+          history: 1w
+          description: 'It could be increased by using sysctrl utility or modifying file /etc/sysctl.conf.'
+          tags:
+            -
+              tag: Application
+              value: OS
+          triggers:
+            -
+              uuid: 9f31bdba420c42c290c9485723b14963
+              expression: 'last(/Template Google OS Linux/kernel.maxfiles)<1024'
+              name: 'Configured max number of opened files is too low on {HOST.NAME}'
+              priority: INFO
+        -
+          uuid: f3463ca8f7d74e6f867622686e49090c
+          name: 'Maximum number of processes'
+          key: kernel.maxproc
+          delay: 10s
+          history: 1w
+          description: 'It could be increased by using sysctrl utility or modifying file /etc/sysctl.conf.'
+          tags:
+            -
+              tag: Application
+              value: OS
+          triggers:
+            -
+              uuid: db08c18fa59d40d3b299c6524cddd79c
+              expression: 'last(/Template Google OS Linux/kernel.maxproc)<256'
+              name: 'Configured max number of processes is too low on {HOST.NAME}'
+              priority: INFO
+        -
+          uuid: a7a1a51de32d42a3accd98cee4fac5f2
+          name: 'Number of running processes'
+          key: 'proc.num[,,run]'
+          delay: 10s
+          history: 1w
+          description: 'Number of processes in running state.'
+          tags:
+            -
+              tag: Application
+              value: Processes
+          triggers:
+            -
+              uuid: bdf5dc666a834260b41f7f8c463b0581
+              expression: 'avg(/Template Google OS Linux/proc.num[,,run],1m)>30'
+              name: 'Too many processes running on {HOST.NAME}'
+              priority: WARNING
+        -
+          uuid: cd187c70113b4728b4723b271dcb02eb
+          name: 'Number of processes'
+          key: 'proc.num[]'
+          delay: 10s
+          history: 1w
+          description: 'Total number of processes in any state.'
+          tags:
+            -
+              tag: Application
+              value: Processes
+          triggers:
+            -
+              uuid: 3f4c8a5c032e489092d1a209d4907c59
+              expression: 'avg(/Template Google OS Linux/proc.num[],1m)>300'
+              name: 'Too many processes on {HOST.NAME}'
+              priority: WARNING
+        -
+          uuid: 9fadda9d1b8e47daba01c85030124c0d
+          name: 'Host boot time'
+          key: system.boottime
+          delay: 10s
+          history: 1w
+          units: unixtime
+          tags:
+            -
+              tag: Application
+              value: General
+            -
+              tag: Application
+              value: OS
+        -
+          uuid: 6c460b3a1fb349d68bc8750af9e58f19
+          name: 'Interrupts per second'
+          key: system.cpu.intr
+          delay: 10s
+          history: 1w
+          units: ips
+          preprocessing:
+            -
+              type: CHANGE_PER_SECOND
+              parameters:
+                - ''
+          tags:
+            -
+              tag: Application
+              value: CPU
+            -
+              tag: Application
+              value: Performance
+        -
+          uuid: 37d354e23d0441618208167788be7798
+          name: 'Processor load (1 min average per core)'
+          key: 'system.cpu.load[percpu,avg1]'
+          delay: 10s
+          history: 1w
+          value_type: FLOAT
+          description: 'The processor load is calculated as system CPU load divided by number of CPU cores.'
+          tags:
+            -
+              tag: Application
+              value: CPU
+            -
+              tag: Application
+              value: Performance
+          triggers:
+            -
+              uuid: 085e87288add4a2589581f018260a80d
+              expression: 'avg(/Template Google OS Linux/system.cpu.load[percpu,avg1],1m)>5'
+              name: 'Processor load is too high on {HOST.NAME}'
+              priority: WARNING
+        -
+          uuid: 654953dd326c474c83677a03ed817e3a
+          name: 'Processor load (5 min average per core)'
+          key: 'system.cpu.load[percpu,avg5]'
+          delay: 10s
+          history: 1w
+          value_type: FLOAT
+          description: 'The processor load is calculated as system CPU load divided by number of CPU cores.'
+          tags:
+            -
+              tag: Application
+              value: CPU
+            -
+              tag: Application
+              value: Performance
+        -
+          uuid: 653b4af555ea4afba4d6b065555809b2
+          name: 'Processor load (15 min average per core)'
+          key: 'system.cpu.load[percpu,avg15]'
+          delay: 10s
+          history: 1w
+          value_type: FLOAT
+          description: 'The processor load is calculated as system CPU load divided by number of CPU cores.'
+          tags:
+            -
+              tag: Application
+              value: CPU
+            -
+              tag: Application
+              value: Performance
+        -
+          uuid: 94de4295b8ec4c86bade701c872aae0c
+          name: 'Context switches per second'
+          key: system.cpu.switches
+          delay: 10s
+          history: 1w
+          units: sps
+          preprocessing:
+            -
+              type: CHANGE_PER_SECOND
+              parameters:
+                - ''
+          tags:
+            -
+              tag: Application
+              value: CPU
+            -
+              tag: Application
+              value: Performance
+        -
+          uuid: 752103a7d0694d2f96a0de55088312a0
+          name: 'CPU idle time'
+          key: 'system.cpu.util[,idle]'
+          delay: 10s
+          history: 1w
+          value_type: FLOAT
+          units: '%'
+          description: 'The time the CPU has spent doing nothing.'
+          tags:
+            -
+              tag: Application
+              value: CPU
+            -
+              tag: Application
+              value: Performance
+        -
+          uuid: b916d4ab594c40bfbd35a08b4587765d
+          name: 'CPU interrupt time'
+          key: 'system.cpu.util[,interrupt]'
+          delay: 10s
+          history: 1w
+          value_type: FLOAT
+          units: '%'
+          description: 'The amount of time the CPU has been servicing hardware interrupts.'
+          tags:
+            -
+              tag: Application
+              value: CPU
+            -
+              tag: Application
+              value: Performance
+        -
+          uuid: ab422bc2ca1d404d89e354cfc9b77a9e
+          name: 'CPU iowait time'
+          key: 'system.cpu.util[,iowait]'
+          delay: 10s
+          history: 1w
+          value_type: FLOAT
+          units: '%'
+          description: 'Amount of time the CPU has been waiting for I/O to complete.'
+          tags:
+            -
+              tag: Application
+              value: CPU
+            -
+              tag: Application
+              value: Performance
+          triggers:
+            -
+              uuid: a3a7a2ce5eb5479ab10f96fd748f7e71
+              expression: 'avg(/Template Google OS Linux/system.cpu.util[,iowait],1m)>20'
+              name: 'Disk I/O is overloaded on {HOST.NAME}'
+              priority: WARNING
+              description: 'OS spends significant time waiting for I/O (input/output) operations. It could be indicator of performance issues with storage system.'
+        -
+          uuid: 88419dc843674876a91722871210458f
+          name: 'CPU nice time'
+          key: 'system.cpu.util[,nice]'
+          delay: 10s
+          history: 1w
+          value_type: FLOAT
+          units: '%'
+          description: 'The time the CPU has spent running users'' processes that have been niced.'
+          tags:
+            -
+              tag: Application
+              value: CPU
+            -
+              tag: Application
+              value: Performance
+        -
+          uuid: f173dfc6ed1448caa8eb2a164937b784
+          name: 'CPU softirq time'
+          key: 'system.cpu.util[,softirq]'
+          delay: 10s
+          history: 1w
+          value_type: FLOAT
+          units: '%'
+          description: 'The amount of time the CPU has been servicing software interrupts.'
+          tags:
+            -
+              tag: Application
+              value: CPU
+            -
+              tag: Application
+              value: Performance
+        -
+          uuid: 4ab07ad4c0f140169675178b0767b9b7
+          name: 'CPU steal time'
+          key: 'system.cpu.util[,steal]'
+          delay: 10s
+          history: 1w
+          value_type: FLOAT
+          units: '%'
+          description: 'The amount of CPU ''stolen'' from this virtual machine by the hypervisor for other tasks (such as running another virtual machine).'
+          tags:
+            -
+              tag: Application
+              value: CPU
+            -
+              tag: Application
+              value: Performance
+        -
+          uuid: cd379bf1fd7149a1809ade1227d3514a
+          name: 'CPU system time'
+          key: 'system.cpu.util[,system]'
+          delay: 10s
+          history: 1w
+          value_type: FLOAT
+          units: '%'
+          description: 'The time the CPU has spent running the kernel and its processes.'
+          tags:
+            -
+              tag: Application
+              value: CPU
+            -
+              tag: Application
+              value: Performance
+        -
+          uuid: 40331bf3dfa0428e8966fd09c02d0327
+          name: 'CPU user time'
+          key: 'system.cpu.util[,user]'
+          delay: 10s
+          history: 1w
+          value_type: FLOAT
+          units: '%'
+          description: 'The time the CPU has spent running users'' processes that are not niced.'
+          tags:
+            -
+              tag: Application
+              value: CPU
+            -
+              tag: Application
+              value: Performance
+        -
+          uuid: d6b6a807ebbf45529b6997f04cb9ef67
+          name: 'Host name'
+          key: system.hostname
+          delay: 10s
+          history: 1w
+          trends: '0'
+          value_type: CHAR
+          description: 'System host name.'
+          inventory_link: NAME
+          tags:
+            -
+              tag: Application
+              value: General
+            -
+              tag: Application
+              value: OS
+          triggers:
+            -
+              uuid: 74881f759b0a47649e00696b702a8533
+              expression: '(last(/Template Google OS Linux/system.hostname,#1)<>last(/Template Google OS Linux/system.hostname,#2))>0'
+              name: 'Hostname was changed on {HOST.NAME}'
+              priority: INFO
+        -
+          uuid: 51c32be132f148838349e6864ec9a3f4
+          name: 'System MAC address'
+          key: system.hw.macaddr
+          delay: 10s
+          history: 1w
+          trends: '0'
+          value_type: CHAR
+          inventory_link: MACADDRESS_A
+          tags:
+            -
+              tag: Application
+              value: OS
+        -
+          uuid: 5314f8fd85cd48ec80a6c3d328b1b6f1
+          name: 'Host local time'
+          key: system.localtime
+          delay: 10s
+          history: 1w
+          units: unixtime
+          tags:
+            -
+              tag: Application
+              value: General
+            -
+              tag: Application
+              value: OS
+        -
+          uuid: 9b92c5ece28b4162b4df8af74470e9a8
+          name: 'System arch'
+          key: system.sw.arch
+          delay: 10s
+          history: 1w
+          trends: '0'
+          value_type: CHAR
+          inventory_link: HW_ARCH
+          tags:
+            -
+              tag: Application
+              value: OS
+        -
+          uuid: db4d050adfd74d98ad27c90dca76cffe
+          name: 'System OS'
+          key: system.sw.os
+          delay: 10s
+          history: 1w
+          trends: '0'
+          value_type: CHAR
+          inventory_link: OS_FULL
+          tags:
+            -
+              tag: Application
+              value: OS
+        -
+          uuid: 66efc6e6ffdd4796aab080f9c40aa51f
+          name: 'System google package'
+          key: 'system.sw.packages[google]'
+          delay: 10s
+          history: 1w
+          trends: '0'
+          value_type: TEXT
+          inventory_link: SOFTWARE
+          tags:
+            -
+              tag: Application
+              value: OS
+        -
+          uuid: 5f6cdc4daf1a4da7b2447aaac7674592
+          name: 'Free swap space'
+          key: 'system.swap.size[,free]'
+          delay: 10s
+          history: 1w
+          units: B
+          tags:
+            -
+              tag: Application
+              value: Memory
+        -
+          uuid: be4fce1563ee433ea30e62fd290fe0be
+          name: 'Free swap space in %'
+          key: 'system.swap.size[,pfree]'
+          delay: 10s
+          history: 1w
+          value_type: FLOAT
+          units: '%'
+          tags:
+            -
+              tag: Application
+              value: Memory
+          triggers:
+            -
+              uuid: 19f86e5d4274472ab2a6ff5ef38c0425
+              expression: 'last(/Template Google OS Linux/system.swap.size[,pfree])<50'
+              name: 'Lack of free swap space on {HOST.NAME}'
+              status: DISABLED
+              priority: WARNING
+              description: 'It probably means that the systems requires more physical memory.'
+        -
+          uuid: 01fd4d3b21554152b98a88894eade5f1
+          name: 'Total swap space'
+          key: 'system.swap.size[,total]'
+          delay: 10s
+          history: 1w
+          units: B
+          tags:
+            -
+              tag: Application
+              value: Memory
+        -
+          uuid: e84ab0013c894f92b813cd34a9e3a8e7
+          name: 'System information'
+          key: system.uname
+          delay: 10s
+          history: 1w
+          trends: '0'
+          value_type: CHAR
+          description: 'The information as normally returned by ''uname -a''.'
+          inventory_link: OS
+          tags:
+            -
+              tag: Application
+              value: General
+            -
+              tag: Application
+              value: OS
+          triggers:
+            -
+              uuid: 0dc6f2d13c184220b16c7f540968ce0d
+              expression: '(last(/Template Google OS Linux/system.uname,#1)<>last(/Template Google OS Linux/system.uname,#2))>0'
+              name: 'Host information was changed on {HOST.NAME}'
+              priority: INFO
+        -
+          uuid: c7d7f0c62b9e49e296d67885862e6006
+          name: 'System uptime'
+          key: system.uptime
+          delay: 10s
+          history: 1w
+          units: uptime
+          tags:
+            -
+              tag: Application
+              value: General
+            -
+              tag: Application
+              value: OS
+          triggers:
+            -
+              uuid: 7a8c4663e8804c5289040a36965fb102
+              expression: 'change(/Template Google OS Linux/system.uptime)<0'
+              name: '{HOST.NAME} has just been restarted'
+              priority: INFO
+        -
+          uuid: 9c93d2e53b1c41d285082d936c383be0
+          name: 'Number of logged in users'
+          key: system.users.num
+          delay: 10s
+          history: 1w
+          description: 'Number of users who are currently logged in.'
+          tags:
+            -
+              tag: Application
+              value: OS
+            -
+              tag: Application
+              value: Security
+        -
+          uuid: a360bbf25c094eb993dfea97ea718081
+          name: 'Checksum of /etc/passwd'
+          key: 'vfs.file.cksum[/etc/passwd]'
+          delay: 10s
+          history: 1w
+          tags:
+            -
+              tag: Application
+              value: Security
+          triggers:
+            -
+              uuid: 9cf57afab85c4795be8ba73721a80b82
+              expression: '(last(/Template Google OS Linux/vfs.file.cksum[/etc/passwd],#1)<>last(/Template Google OS Linux/vfs.file.cksum[/etc/passwd],#2))>0'
+              name: '/etc/passwd has been changed on {HOST.NAME}'
+              priority: WARNING
+        -
+          uuid: cdf18b7da9414e3fb03e116817317ab9
+          name: 'Available memory'
+          key: 'vm.memory.size[available]'
+          delay: 10s
+          history: 1w
+          units: B
+          description: 'Available memory is defined as free+cached+buffers memory.'
+          tags:
+            -
+              tag: Application
+              value: Memory
+          triggers:
+            -
+              uuid: 6a2bc0eb0e074eb7a878ce97a9115673
+              expression: 'last(/Template Google OS Linux/vm.memory.size[available])<20M'
+              name: 'Lack of available memory on server {HOST.NAME}'
+              priority: AVERAGE
+        -
+          uuid: 833eacc91b664778adbb14355e3378e1
+          name: 'Total memory'
+          key: 'vm.memory.size[total]'
+          delay: 10s
+          history: 1w
+          units: B
+          tags:
+            -
+              tag: Application
+              value: Memory
+      discovery_rules:
+        -
+          uuid: 59f32e7fdfe442ea878fe797e449178d
+          name: 'Network interface discovery'
+          key: net.if.discovery
+          filter:
+            conditions:
+              -
+                macro: '{#IFNAME}'
+                value: '@Network interfaces for discovery'
+                formulaid: A
+          lifetime: 1d
+          description: 'Discovery of network interfaces as defined in global regular expression "Network interfaces for discovery".'
+          item_prototypes:
+            -
+              uuid: 3fde0bcee80942c9a093f2f83e5de95e
+              name: 'Incoming network traffic on {#IFNAME}'
+              key: 'net.if.in[{#IFNAME}]'
+              history: 1w
+              units: bps
+              preprocessing:
+                -
+                  type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '8'
+              tags:
+                -
+                  tag: Application
+                  value: 'Network interfaces'
+            -
+              uuid: 36d20d9d6c324a2285e4faadfa6ed00e
+              name: 'Outgoing network traffic on {#IFNAME}'
+              key: 'net.if.out[{#IFNAME}]'
+              history: 1w
+              units: bps
+              preprocessing:
+                -
+                  type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '8'
+              tags:
+                -
+                  tag: Application
+                  value: 'Network interfaces'
+          graph_prototypes:
+            -
+              uuid: cfee699aa16b4129ac91f10584468a80
+              name: 'Network traffic on {#IFNAME}'
+              ymin_type_1: FIXED
+              graph_items:
+                -
+                  drawtype: GRADIENT_LINE
+                  color: 00AA00
+                  item:
+                    host: 'Template Google OS Linux'
+                    key: 'net.if.in[{#IFNAME}]'
+                -
+                  sortorder: '1'
+                  drawtype: GRADIENT_LINE
+                  color: 3333FF
+                  item:
+                    host: 'Template Google OS Linux'
+                    key: 'net.if.out[{#IFNAME}]'
+        -
+          uuid: 194528dce0234e6fa40dab029627302b
+          name: 'Mounted filesystem discovery'
+          key: vfs.fs.discovery
+          filter:
+            conditions:
+              -
+                macro: '{#FSTYPE}'
+                value: '@File systems for discovery'
+                formulaid: A
+          lifetime: 1d
+          description: 'Discovery of file systems of different types as defined in global regular expression "File systems for discovery".'
+          item_prototypes:
+            -
+              uuid: c5fcc377678b4b24a90ae82cf31a1404
+              name: 'Free inodes on {#FSNAME} (percentage)'
+              key: 'vfs.fs.inode[{#FSNAME},pfree]'
+              history: 1w
+              value_type: FLOAT
+              units: '%'
+              tags:
+                -
+                  tag: Application
+                  value: Filesystems
+              trigger_prototypes:
+                -
+                  uuid: a67d2a3f7b53471ba0363e90db328d8d
+                  expression: 'last(/Template Google OS Linux/vfs.fs.inode[{#FSNAME},pfree])<20'
+                  name: 'Free inodes is less than 20% on volume {#FSNAME}'
+                  priority: WARNING
+            -
+              uuid: e54521a577f5448ca683ebcdd4995636
+              name: 'Free disk space on {#FSNAME}'
+              key: 'vfs.fs.size[{#FSNAME},free]'
+              history: 1w
+              units: B
+              tags:
+                -
+                  tag: Application
+                  value: Filesystems
+            -
+              uuid: 9ee43700966a4f219a1e6df383ab1b66
+              name: 'Free disk space on {#FSNAME} (percentage)'
+              key: 'vfs.fs.size[{#FSNAME},pfree]'
+              history: 1w
+              value_type: FLOAT
+              units: '%'
+              tags:
+                -
+                  tag: Application
+                  value: Filesystems
+              trigger_prototypes:
+                -
+                  uuid: 28fe1298f721446cbcb35d843895e62d
+                  expression: 'last(/Template Google OS Linux/vfs.fs.size[{#FSNAME},pfree])<20'
+                  name: 'Free disk space is less than 20% on volume {#FSNAME}'
+                  priority: WARNING
+            -
+              uuid: c51b562060ff4b9a9c7542623f05a809
+              name: 'Total disk space on {#FSNAME}'
+              key: 'vfs.fs.size[{#FSNAME},total]'
+              history: 1w
+              units: B
+              tags:
+                -
+                  tag: Application
+                  value: Filesystems
+            -
+              uuid: e0086c98c24143749d062d5ae95e6541
+              name: 'Used disk space on {#FSNAME}'
+              key: 'vfs.fs.size[{#FSNAME},used]'
+              history: 1w
+              units: B
+              tags:
+                -
+                  tag: Application
+                  value: Filesystems
+          graph_prototypes:
+            -
+              uuid: ac6e79c897bb4569ab930795f41f5772
+              name: 'Disk space usage {#FSNAME}'
+              width: '600'
+              height: '340'
+              show_work_period: 'NO'
+              show_triggers: 'NO'
+              type: PIE
+              show_3d: 'YES'
+              graph_items:
+                -
+                  color: C80000
+                  type: GRAPH_SUM
+                  item:
+                    host: 'Template Google OS Linux'
+                    key: 'vfs.fs.size[{#FSNAME},total]'
+                -
+                  sortorder: '1'
+                  color: 00C800
+                  item:
+                    host: 'Template Google OS Linux'
+                    key: 'vfs.fs.size[{#FSNAME},free]'
+      dashboards:
+        -
+          uuid: 31cf8bb44efc43b18a0caad21da7566c
+          name: 'System performance'
+          pages:
+            -
+              widgets:
+                -
+                  type: GRAPH_CLASSIC
+                  width: '12'
+                  height: '5'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: source_type
+                      value: '0'
+                    -
+                      type: GRAPH
+                      name: graphid
+                      value:
+                        host: 'Template Google OS Linux'
+                        name: 'CPU load'
+                -
+                  type: GRAPH_CLASSIC
+                  x: '12'
+                  width: '12'
+                  height: '5'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: source_type
+                      value: '0'
+                    -
+                      type: GRAPH
+                      name: graphid
+                      value:
+                        host: 'Template Google OS Linux'
+                        name: 'CPU utilization'
+                -
+                  type: GRAPH_CLASSIC
+                  'y': '5'
+                  width: '12'
+                  height: '7'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: source_type
+                      value: '0'
+                    -
+                      type: GRAPH
+                      name: graphid
+                      value:
+                        host: 'Template Google OS Linux'
+                        name: 'Memory usage'
+                -
+                  type: GRAPH_CLASSIC
+                  x: '12'
+                  'y': '5'
+                  width: '12'
+                  height: '7'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: source_type
+                      value: '0'
+                    -
+                      type: GRAPH
+                      name: graphid
+                      value:
+                        host: 'Template Google OS Linux'
+                        name: 'Swap usage'
+                -
+                  type: GRAPH_CLASSIC
+                  'y': '12'
+                  width: '12'
+                  height: '5'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: source_type
+                      value: '1'
+                    -
+                      type: ITEM
+                      name: itemid
+                      value:
+                        host: 'Template Google OS Linux'
+                        key: 'proc.num[]'
+                -
+                  type: GRAPH_CLASSIC
+                  x: '12'
+                  'y': '12'
+                  width: '12'
+                  height: '5'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: source_type
+                      value: '1'
+                    -
+                      type: ITEM
+                      name: itemid
+                      value:
+                        host: 'Template Google OS Linux'
+                        key: 'proc.num[,,run]'
+  graphs:
+    -
+      uuid: 1ffd1bde186c42cb884249adb04e013c
+      name: 'CPU jumps'
+      graph_items:
+        -
+          color: '009900'
+          item:
+            host: 'Template Google OS FreeBSD'
+            key: system.cpu.switches
+        -
+          sortorder: '1'
+          color: '000099'
+          item:
+            host: 'Template Google OS FreeBSD'
+            key: system.cpu.intr
+    -
+      uuid: 851fb7e2ee7347028949aa21541bf666
+      name: 'CPU jumps'
+      graph_items:
+        -
+          color: '009900'
+          item:
+            host: 'Template Google OS Linux'
+            key: system.cpu.switches
+        -
+          sortorder: '1'
+          color: '000099'
+          item:
+            host: 'Template Google OS Linux'
+            key: system.cpu.intr
+    -
+      uuid: f1192da53ae046278f26671d11609fb0
+      name: 'CPU load'
+      ymin_type_1: FIXED
+      graph_items:
+        -
+          color: '009900'
+          item:
+            host: 'Template Google OS FreeBSD'
+            key: 'system.cpu.load[percpu,avg1]'
+        -
+          sortorder: '1'
+          color: '000099'
+          item:
+            host: 'Template Google OS FreeBSD'
+            key: 'system.cpu.load[percpu,avg5]'
+        -
+          sortorder: '2'
+          color: '990000'
+          item:
+            host: 'Template Google OS FreeBSD'
+            key: 'system.cpu.load[percpu,avg15]'
+    -
+      uuid: f883a0a008f44c099a793d51f25a1e7f
+      name: 'CPU load'
+      ymin_type_1: FIXED
+      graph_items:
+        -
+          color: '009900'
+          item:
+            host: 'Template Google OS Linux'
+            key: 'system.cpu.load[percpu,avg1]'
+        -
+          sortorder: '1'
+          color: '000099'
+          item:
+            host: 'Template Google OS Linux'
+            key: 'system.cpu.load[percpu,avg5]'
+        -
+          sortorder: '2'
+          color: '990000'
+          item:
+            host: 'Template Google OS Linux'
+            key: 'system.cpu.load[percpu,avg15]'
+    -
+      uuid: c1ad1ebe7f3940449bb8dd0bc1682b1d
+      name: 'CPU utilization'
+      show_triggers: 'NO'
+      type: STACKED
+      ymin_type_1: FIXED
+      ymax_type_1: FIXED
+      graph_items:
+        -
+          drawtype: FILLED_REGION
+          color: FF5555
+          item:
+            host: 'Template Google OS Linux'
+            key: 'system.cpu.util[,steal]'
+        -
+          sortorder: '1'
+          drawtype: FILLED_REGION
+          color: 55FF55
+          item:
+            host: 'Template Google OS Linux'
+            key: 'system.cpu.util[,softirq]'
+        -
+          sortorder: '2'
+          drawtype: FILLED_REGION
+          color: '009999'
+          item:
+            host: 'Template Google OS Linux'
+            key: 'system.cpu.util[,interrupt]'
+        -
+          sortorder: '3'
+          drawtype: FILLED_REGION
+          color: '990099'
+          item:
+            host: 'Template Google OS Linux'
+            key: 'system.cpu.util[,nice]'
+        -
+          sortorder: '4'
+          drawtype: FILLED_REGION
+          color: '999900'
+          item:
+            host: 'Template Google OS Linux'
+            key: 'system.cpu.util[,iowait]'
+        -
+          sortorder: '5'
+          drawtype: FILLED_REGION
+          color: '990000'
+          item:
+            host: 'Template Google OS Linux'
+            key: 'system.cpu.util[,system]'
+        -
+          sortorder: '6'
+          drawtype: FILLED_REGION
+          color: '000099'
+          item:
+            host: 'Template Google OS Linux'
+            key: 'system.cpu.util[,user]'
+        -
+          sortorder: '7'
+          drawtype: FILLED_REGION
+          color: '009900'
+          item:
+            host: 'Template Google OS Linux'
+            key: 'system.cpu.util[,idle]'
+    -
+      uuid: c401705ba82e498ebdff93921930b811
+      name: 'CPU utilization'
+      show_triggers: 'NO'
+      type: STACKED
+      ymin_type_1: FIXED
+      ymax_type_1: FIXED
+      graph_items:
+        -
+          drawtype: FILLED_REGION
+          color: '009999'
+          item:
+            host: 'Template Google OS FreeBSD'
+            key: 'system.cpu.util[,interrupt]'
+        -
+          sortorder: '1'
+          drawtype: FILLED_REGION
+          color: '990099'
+          item:
+            host: 'Template Google OS FreeBSD'
+            key: 'system.cpu.util[,nice]'
+        -
+          sortorder: '2'
+          drawtype: FILLED_REGION
+          color: '990000'
+          item:
+            host: 'Template Google OS FreeBSD'
+            key: 'system.cpu.util[,system]'
+        -
+          sortorder: '3'
+          drawtype: FILLED_REGION
+          color: '000099'
+          item:
+            host: 'Template Google OS FreeBSD'
+            key: 'system.cpu.util[,user]'
+        -
+          sortorder: '4'
+          drawtype: FILLED_REGION
+          color: '009900'
+          item:
+            host: 'Template Google OS FreeBSD'
+            key: 'system.cpu.util[,idle]'
+    -
+      uuid: 7a6a9d26fa274a56a8cb4a992f5e3f90
+      name: 'ICMP Ping'
+      graph_items:
+        -
+          drawtype: BOLD_LINE
+          color: FF0000
+          item:
+            host: 'Template Google ICMP Ping'
+            key: icmppingloss
+        -
+          sortorder: '1'
+          drawtype: BOLD_LINE
+          color: 0040FF
+          item:
+            host: 'Template Google ICMP Ping'
+            key: icmppingsec
+    -
+      uuid: 288a72e486a8494ab621bf64b710bd49
+      name: 'Memory usage'
+      ymin_type_1: FIXED
+      ymax_type_1: ITEM
+      ymax_item_1:
+        host: 'Template Google OS FreeBSD'
+        key: 'vm.memory.size[total]'
+      graph_items:
+        -
+          drawtype: GRADIENT_LINE
+          color: 00C800
+          item:
+            host: 'Template Google OS FreeBSD'
+            key: 'vm.memory.size[available]'
+    -
+      uuid: bfead1b61a70448d81f6c52abd1b0319
+      name: 'Memory usage'
+      ymin_type_1: FIXED
+      ymax_type_1: ITEM
+      ymax_item_1:
+        host: 'Template Google OS Linux'
+        key: 'vm.memory.size[total]'
+      graph_items:
+        -
+          drawtype: GRADIENT_LINE
+          color: 00C800
+          item:
+            host: 'Template Google OS Linux'
+            key: 'vm.memory.size[available]'
+    -
+      uuid: cfc7b478fe404a1c9f09c5169d272b3e
+      name: 'Swap usage'
+      width: '600'
+      height: '340'
+      show_work_period: 'NO'
+      show_triggers: 'NO'
+      type: PIE
+      show_3d: 'YES'
+      graph_items:
+        -
+          color: AA0000
+          type: GRAPH_SUM
+          item:
+            host: 'Template Google OS Linux'
+            key: 'system.swap.size[,total]'
+        -
+          sortorder: '1'
+          color: 00AA00
+          item:
+            host: 'Template Google OS Linux'
+            key: 'system.swap.size[,free]'
+    -
+      uuid: 7e2485ac12ff4c3892840760aa5e9659
+      name: 'Swap usage'
+      width: '600'
+      height: '340'
+      show_work_period: 'NO'
+      show_triggers: 'NO'
+      type: PIE
+      show_3d: 'YES'
+      graph_items:
+        -
+          color: AA0000
+          type: GRAPH_SUM
+          item:
+            host: 'Template Google OS FreeBSD'
+            key: 'system.swap.size[,total]'
+        -
+          sortorder: '1'
+          color: 00AA00
+          item:
+            host: 'Template Google OS FreeBSD'
+            key: 'system.swap.size[,free]'

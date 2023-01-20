@@ -1,0 +1,2703 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>6.0</version>
+    <date>2023-01-20T20:21:33Z</date>
+    <groups>
+        <group>
+            <uuid>28b45d38adf241578a8480d372eeea95</uuid>
+            <name>Public/Google</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <uuid>985c14da69134376a99f35d6ffbf060c</uuid>
+            <template>Template Google</template>
+            <name>Template Google</name>
+            <templates>
+                <template>
+                    <name>Template Google App HTTP Service</name>
+                </template>
+                <template>
+                    <name>Template Google ICMP Ping</name>
+                </template>
+                <template>
+                    <name>Template Google OS Linux</name>
+                </template>
+            </templates>
+            <groups>
+                <group>
+                    <name>Public/Google</name>
+                </group>
+            </groups>
+        </template>
+        <template>
+            <uuid>5ab0998e348b434594160808ff2e87e3</uuid>
+            <template>Template Google App HTTP Service</template>
+            <name>Template Google App HTTP Service</name>
+            <groups>
+                <group>
+                    <name>Public/Google</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <uuid>b76e3c799dcb45769c08e2b7069f6504</uuid>
+                    <name>HTTP service is running</name>
+                    <type>SIMPLE</type>
+                    <key>net.tcp.service[http]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <valuemap>
+                        <name>Service state</name>
+                    </valuemap>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>HTTP service</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>d26789f0e9e34c4c97ae950911f48a43</uuid>
+                            <expression>max(/Template Google App HTTP Service/net.tcp.service[http],#3)=0</expression>
+                            <name>HTTP service is down on {HOST.NAME}</name>
+                            <priority>AVERAGE</priority>
+                            <tags>
+                                <tag>
+                                    <tag>Service</tag>
+                                    <value>HTTP</value>
+                                </tag>
+                                <tag>
+                                    <tag>Software</tag>
+                                    <value>Apache</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+            <valuemaps>
+                <valuemap>
+                    <uuid>838a43eed81040859b2a035c9f1993ed</uuid>
+                    <name>Service state</name>
+                    <mappings>
+                        <mapping>
+                            <value>0</value>
+                            <newvalue>Down</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>Up</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+            </valuemaps>
+        </template>
+        <template>
+            <uuid>e5e55f2668d9409f8b0d9f169bab587f</uuid>
+            <template>Template Google App Zabbix Agent</template>
+            <name>Template Google App Zabbix Agent</name>
+            <groups>
+                <group>
+                    <name>Public/Google</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <uuid>928578c5be6c4941916a62cdd17ae76e</uuid>
+                    <name>Host name of zabbix_agentd running</name>
+                    <key>agent.hostname</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Zabbix agent</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>e1b366bef53e40c2a9d1a3a330fb26c7</uuid>
+                            <expression>(last(/Template Google App Zabbix Agent/agent.hostname,#1)&lt;&gt;last(/Template Google App Zabbix Agent/agent.hostname,#2))&gt;0</expression>
+                            <name>Host name of zabbix_agentd was changed on {HOST.NAME}</name>
+                            <priority>INFO</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>50d9091cf3644c2382fc6a121c0212e7</uuid>
+                    <name>Agent ping</name>
+                    <key>agent.ping</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <description>The agent always returns 1 for this item. It could be used in combination with nodata() for availability check.</description>
+                    <valuemap>
+                        <name>Zabbix agent ping status</name>
+                    </valuemap>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Zabbix agent</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>c012d54af2e54cedbff311ea9380f2a3</uuid>
+                            <expression>nodata(/Template Google App Zabbix Agent/agent.ping,5m)=1</expression>
+                            <name>Zabbix agent on {HOST.NAME} is unreachable for 5 minutes</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>12dc3ff6237249c69e68d59c50c541c6</uuid>
+                    <name>Version of zabbix_agent(d) running</name>
+                    <key>agent.version</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Zabbix agent</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>c7c96cf7f7ac4bddae769fc6caa606c9</uuid>
+                            <expression>(last(/Template Google App Zabbix Agent/agent.version,#1)&lt;&gt;last(/Template Google App Zabbix Agent/agent.version,#2))&gt;0</expression>
+                            <name>Version of zabbix_agent(d) was changed on {HOST.NAME}</name>
+                            <priority>INFO</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+            <valuemaps>
+                <valuemap>
+                    <uuid>94eb137d4e684d3a824bb693cef1d3a1</uuid>
+                    <name>Zabbix agent ping status</name>
+                    <mappings>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>Up</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+            </valuemaps>
+        </template>
+        <template>
+            <uuid>5934872002374eefa024f649d828f06f</uuid>
+            <template>Template Google FBSD</template>
+            <name>Template Google FBSD</name>
+            <templates>
+                <template>
+                    <name>Template Google App HTTP Service</name>
+                </template>
+                <template>
+                    <name>Template Google ICMP Ping</name>
+                </template>
+                <template>
+                    <name>Template Google OS FreeBSD</name>
+                </template>
+            </templates>
+            <groups>
+                <group>
+                    <name>Public/Google</name>
+                </group>
+            </groups>
+            <dashboards>
+                <dashboard>
+                    <uuid>9292d2e573bf4d7abe29ceed3144b6bb</uuid>
+                    <name>System performance</name>
+                    <pages>
+                        <page/>
+                    </pages>
+                </dashboard>
+            </dashboards>
+        </template>
+        <template>
+            <uuid>cf5bc28feb114668a27f05a65cbcc5be</uuid>
+            <template>Template Google ICMP Ping</template>
+            <name>Template Google ICMP Ping</name>
+            <description>Template Module ICMP Ping version: 0.15</description>
+            <groups>
+                <group>
+                    <name>Public/Google</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <uuid>79c0224a0e7e4aeca10225192aac634f</uuid>
+                    <name>ICMP ping</name>
+                    <type>SIMPLE</type>
+                    <key>icmpping</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <valuemap>
+                        <name>Service state</name>
+                    </valuemap>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Status</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>4e9fdb359a15493c96f525d3e72bca78</uuid>
+                            <expression>max(/Template Google ICMP Ping/icmpping,#3)=0</expression>
+                            <name>Unavailable by ICMP ping</name>
+                            <priority>HIGH</priority>
+                            <description>Last value: {ITEM.LASTVALUE1}.
+Last three attempts returned timeout.  Please check device connectivity.</description>
+                            <tags>
+                                <tag>
+                                    <tag>Proto</tag>
+                                    <value>ICMP</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>fdbbec73bb7a4253841f763445ef46e4</uuid>
+                    <name>ICMP loss</name>
+                    <type>SIMPLE</type>
+                    <key>icmppingloss</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Status</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>aebb3fa4ff28439b9d2659247bdbb160</uuid>
+                            <expression>min(/Template Google ICMP Ping/icmppingloss,1m)&gt;{$ICMP_LOSS_WARN} and min(/Template Google ICMP Ping/icmppingloss,1m)&lt;100</expression>
+                            <name>High ICMP ping loss</name>
+                            <priority>WARNING</priority>
+                            <description>Last value: {ITEM.LASTVALUE1}.</description>
+                            <dependencies>
+                                <dependency>
+                                    <name>Unavailable by ICMP ping</name>
+                                    <expression>max(/Template Google ICMP Ping/icmpping,#3)=0</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>8a34da97974d41a6bedca9b1d2d081a3</uuid>
+                    <name>ICMP response time</name>
+                    <type>SIMPLE</type>
+                    <key>icmppingsec</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <value_type>FLOAT</value_type>
+                    <units>s</units>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Status</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>434c0340af914afb8df6b7494badf162</uuid>
+                            <expression>avg(/Template Google ICMP Ping/icmppingsec,1m)&gt;{$ICMP_RESPONSE_TIME_WARN}</expression>
+                            <name>High ICMP ping response time</name>
+                            <priority>WARNING</priority>
+                            <description>Last value: {ITEM.LASTVALUE1}.</description>
+                            <dependencies>
+                                <dependency>
+                                    <name>High ICMP ping loss</name>
+                                    <expression>min(/Template Google ICMP Ping/icmppingloss,1m)&gt;{$ICMP_LOSS_WARN} and min(/Template Google ICMP Ping/icmppingloss,1m)&lt;100</expression>
+                                </dependency>
+                                <dependency>
+                                    <name>Unavailable by ICMP ping</name>
+                                    <expression>max(/Template Google ICMP Ping/icmpping,#3)=0</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+            <macros>
+                <macro>
+                    <macro>{$ICMP_LOSS_WARN}</macro>
+                    <value>20</value>
+                </macro>
+                <macro>
+                    <macro>{$ICMP_RESPONSE_TIME_WARN}</macro>
+                    <value>0.15</value>
+                </macro>
+            </macros>
+            <valuemaps>
+                <valuemap>
+                    <uuid>d6a4401eaaf9469cb5131b63f0e28643</uuid>
+                    <name>Service state</name>
+                    <mappings>
+                        <mapping>
+                            <value>0</value>
+                            <newvalue>Down</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>Up</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+            </valuemaps>
+        </template>
+        <template>
+            <uuid>0d6a50a138354bdfa2da4602b90b774f</uuid>
+            <template>Template Google OS FreeBSD</template>
+            <name>Template Google OS FreeBSD</name>
+            <templates>
+                <template>
+                    <name>Template Google App Zabbix Agent</name>
+                </template>
+            </templates>
+            <groups>
+                <group>
+                    <name>Public/Google</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <uuid>306406aee3e540ad8e8bd7d2f8c117fa</uuid>
+                    <name>Maximum number of opened files</name>
+                    <key>kernel.maxfiles</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <description>It could be increased by using sysctrl utility or modifying file /etc/sysctl.conf.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>OS</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>8e45340dc576497dbcb84290bd1eba3b</uuid>
+                            <expression>last(/Template Google OS FreeBSD/kernel.maxfiles)&lt;1024</expression>
+                            <name>Configured max number of opened files is too low on {HOST.NAME}</name>
+                            <priority>INFO</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>89ef8a29e9664dfaa203047fb13ec3f4</uuid>
+                    <name>Maximum number of processes</name>
+                    <key>kernel.maxproc</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <description>It could be increased by using sysctrl utility or modifying file /etc/sysctl.conf.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>OS</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>83b39bf7e1f44f6e898f5a08d5ce4955</uuid>
+                            <expression>last(/Template Google OS FreeBSD/kernel.maxproc)&lt;256</expression>
+                            <name>Configured max number of processes is too low on {HOST.NAME}</name>
+                            <priority>INFO</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>15be6fee9e1e43caad73edc2d1f334e5</uuid>
+                    <name>Number of running processes</name>
+                    <key>proc.num[,,run]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <description>Number of processes in running state.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Processes</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>b06dd1ac842c4e6fa338b7fbbbfa297e</uuid>
+                            <expression>avg(/Template Google OS FreeBSD/proc.num[,,run],5m)&gt;30</expression>
+                            <name>Too many processes running on {HOST.NAME}</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>3e7504cddc96485d97a10726ae0dc268</uuid>
+                    <name>Number of processes</name>
+                    <key>proc.num[]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <description>Total number of processes in any state.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Processes</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>93b8395c043d4fe4bb6a354e17903995</uuid>
+                            <expression>avg(/Template Google OS FreeBSD/proc.num[],5m)&gt;300</expression>
+                            <name>Too many processes on {HOST.NAME}</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>bc4fb13c06d94159b4fdadc48a59dac7</uuid>
+                    <name>Host boot time</name>
+                    <key>system.boottime</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <units>unixtime</units>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>General</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>OS</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>0034bd75dea542db9f2a3bc57590b602</uuid>
+                    <name>Interrupts per second</name>
+                    <key>system.cpu.intr</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <units>ips</units>
+                    <preprocessing>
+                        <step>
+                            <type>CHANGE_PER_SECOND</type>
+                            <parameters>
+                                <parameter/>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>CPU</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Performance</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>724fd6b04bb9406fab60b1ec09b5de8d</uuid>
+                    <name>Processor load (1 min average per core)</name>
+                    <key>system.cpu.load[percpu,avg1]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <value_type>FLOAT</value_type>
+                    <description>The processor load is calculated as system CPU load divided by number of CPU cores.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>CPU</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Performance</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>6f63294f3b994b398c3c1749c58c3009</uuid>
+                            <expression>avg(/Template Google OS FreeBSD/system.cpu.load[percpu,avg1],5m)&gt;5</expression>
+                            <name>Processor load is too high on {HOST.NAME}</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>62c9d864d0e24700ac74f9dafd16c0bf</uuid>
+                    <name>Processor load (5 min average per core)</name>
+                    <key>system.cpu.load[percpu,avg5]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <value_type>FLOAT</value_type>
+                    <description>The processor load is calculated as system CPU load divided by number of CPU cores.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>CPU</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Performance</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>bb8094a68d6c46339cc26a298a9f0850</uuid>
+                    <name>Processor load (15 min average per core)</name>
+                    <key>system.cpu.load[percpu,avg15]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <value_type>FLOAT</value_type>
+                    <description>The processor load is calculated as system CPU load divided by number of CPU cores.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>CPU</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Performance</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>cc9f762d78694a13a06ba5f214ed6bdc</uuid>
+                    <name>Context switches per second</name>
+                    <key>system.cpu.switches</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <units>sps</units>
+                    <preprocessing>
+                        <step>
+                            <type>CHANGE_PER_SECOND</type>
+                            <parameters>
+                                <parameter/>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>CPU</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Performance</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>43cda01c1250499cb506088051de8b3d</uuid>
+                    <name>CPU idle time</name>
+                    <key>system.cpu.util[,idle]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <description>The time the CPU has spent doing nothing.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>CPU</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Performance</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>2041f4f77adf43b8b9e4fb384446c8d9</uuid>
+                    <name>CPU interrupt time</name>
+                    <key>system.cpu.util[,interrupt]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <description>The amount of time the CPU has been servicing hardware interrupts.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>CPU</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Performance</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>4c2baed2251a400798b43c9cdbd6811b</uuid>
+                    <name>CPU nice time</name>
+                    <key>system.cpu.util[,nice]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <description>The time the CPU has spent running users' processes that have been niced.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>CPU</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Performance</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>f5682f11fd664dbebdf1bed4dcee62bd</uuid>
+                    <name>CPU system time</name>
+                    <key>system.cpu.util[,system]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <description>The time the CPU has spent running the kernel and its processes.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>CPU</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Performance</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>047635ec24a14240bb29c496382830f3</uuid>
+                    <name>CPU user time</name>
+                    <key>system.cpu.util[,user]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <description>The time the CPU has spent running users' processes that are not niced.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>CPU</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Performance</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>8aa61ac6db904c1880f4c520c3f4e19c</uuid>
+                    <name>Host name</name>
+                    <key>system.hostname</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <description>System host name.</description>
+                    <inventory_link>NAME</inventory_link>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>General</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>OS</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>4cca83d633ad445faea7d0572bfb815c</uuid>
+                            <expression>(last(/Template Google OS FreeBSD/system.hostname,#1)&lt;&gt;last(/Template Google OS FreeBSD/system.hostname,#2))&gt;0</expression>
+                            <name>Hostname was changed on {HOST.NAME}</name>
+                            <priority>INFO</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>250fa8c4acea4403ac2b41bd058f347d</uuid>
+                    <name>Host local time</name>
+                    <key>system.localtime</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <units>unixtime</units>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>General</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>OS</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>82c15b4f98f2417884a8b6d7b25ddce6</uuid>
+                    <name>System arch</name>
+                    <key>system.sw.arch</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <inventory_link>HW_ARCH</inventory_link>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>OS</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>5bfc27115e604d88b7a58663f50d809b</uuid>
+                    <name>Free swap space</name>
+                    <key>system.swap.size[,free]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <units>B</units>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Memory</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>5f5cd108c5a744dfac9b615f8c77418b</uuid>
+                    <name>Free swap space in %</name>
+                    <key>system.swap.size[,pfree]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Memory</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>c0eb981ca75244c2925ba36d9c579208</uuid>
+                            <expression>last(/Template Google OS FreeBSD/system.swap.size[,pfree])&lt;50</expression>
+                            <name>Lack of free swap space on {HOST.NAME}</name>
+                            <priority>WARNING</priority>
+                            <description>It probably means that the systems requires more physical memory.</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>684c45fd4d9e4ae5b3f4581fdecd0409</uuid>
+                    <name>Total swap space</name>
+                    <key>system.swap.size[,total]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <units>B</units>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Memory</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>d958ce66a9a84e72b4a37162583d828b</uuid>
+                    <name>System information</name>
+                    <key>system.uname</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <description>The information as normally returned by 'uname -a'.</description>
+                    <inventory_link>OS</inventory_link>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>General</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>OS</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>02a229e1db4546ea928c49360edf4214</uuid>
+                            <expression>(last(/Template Google OS FreeBSD/system.uname,#1)&lt;&gt;last(/Template Google OS FreeBSD/system.uname,#2))&gt;0</expression>
+                            <name>Host information was changed on {HOST.NAME}</name>
+                            <priority>INFO</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>8119d44902e840b4936b2d5e2686c88a</uuid>
+                    <name>System uptime</name>
+                    <key>system.uptime</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <units>uptime</units>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>General</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>OS</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>62535adf8c254fd389f3aa597fd2088b</uuid>
+                            <expression>change(/Template Google OS FreeBSD/system.uptime)&lt;0</expression>
+                            <name>{HOST.NAME} has just been restarted</name>
+                            <priority>INFO</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>ca59ca6bf8ba452e918242e665268541</uuid>
+                    <name>Number of logged in users</name>
+                    <key>system.users.num</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <description>Number of users who are currently logged in.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>OS</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Security</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>79d9935f6c2b486093033712d40b1623</uuid>
+                    <name>Checksum of /etc/passwd</name>
+                    <key>vfs.file.cksum[/etc/passwd]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Security</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>0352959f69b24a13a8609beb5b451969</uuid>
+                            <expression>(last(/Template Google OS FreeBSD/vfs.file.cksum[/etc/passwd],#1)&lt;&gt;last(/Template Google OS FreeBSD/vfs.file.cksum[/etc/passwd],#2))&gt;0</expression>
+                            <name>/etc/passwd has been changed on {HOST.NAME}</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>1253e5f0ae4c49e28a95567c5d987d34</uuid>
+                    <name>Available memory</name>
+                    <key>vm.memory.size[available]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <units>B</units>
+                    <description>Available memory is defined as free+cached+buffers memory.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Memory</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>d3f8756ea9974c4faa299f37567872dc</uuid>
+                            <expression>last(/Template Google OS FreeBSD/vm.memory.size[available])&lt;20M</expression>
+                            <name>Lack of available memory on server {HOST.NAME}</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>91c069c4e7334112b725c0023a49a6e5</uuid>
+                    <name>Total memory</name>
+                    <key>vm.memory.size[total]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <units>B</units>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Memory</value>
+                        </tag>
+                    </tags>
+                </item>
+            </items>
+            <discovery_rules>
+                <discovery_rule>
+                    <uuid>a299a533388b4c54bbe2951a990c32ff</uuid>
+                    <name>Network interface discovery</name>
+                    <key>net.if.discovery</key>
+                    <filter>
+                        <conditions>
+                            <condition>
+                                <macro>{#IFNAME}</macro>
+                                <value>@Network interfaces for discovery</value>
+                                <formulaid>A</formulaid>
+                            </condition>
+                        </conditions>
+                    </filter>
+                    <description>Discovery of network interfaces as defined in global regular expression &quot;Network interfaces for discovery&quot;.</description>
+                    <item_prototypes>
+                        <item_prototype>
+                            <uuid>7a86fd1aeb0846bdab336db2a01a22f9</uuid>
+                            <name>Incoming network traffic on {#IFNAME}</name>
+                            <key>net.if.in[{#IFNAME}]</key>
+                            <history>1w</history>
+                            <units>bps</units>
+                            <preprocessing>
+                                <step>
+                                    <type>CHANGE_PER_SECOND</type>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>MULTIPLIER</type>
+                                    <parameters>
+                                        <parameter>8</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Network interfaces</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>17110d2cb54f4137b23650c57f7e1328</uuid>
+                            <name>Outgoing network traffic on {#IFNAME}</name>
+                            <key>net.if.out[{#IFNAME}]</key>
+                            <history>1w</history>
+                            <units>bps</units>
+                            <preprocessing>
+                                <step>
+                                    <type>CHANGE_PER_SECOND</type>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>MULTIPLIER</type>
+                                    <parameters>
+                                        <parameter>8</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Network interfaces</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                    </item_prototypes>
+                    <graph_prototypes>
+                        <graph_prototype>
+                            <uuid>7dfc5092ed38480cbe9ef718562760d9</uuid>
+                            <name>Network traffic on {#IFNAME}</name>
+                            <ymin_type_1>FIXED</ymin_type_1>
+                            <graph_items>
+                                <graph_item>
+                                    <drawtype>GRADIENT_LINE</drawtype>
+                                    <color>00AA00</color>
+                                    <item>
+                                        <host>Template Google OS FreeBSD</host>
+                                        <key>net.if.in[{#IFNAME}]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <drawtype>GRADIENT_LINE</drawtype>
+                                    <color>3333FF</color>
+                                    <item>
+                                        <host>Template Google OS FreeBSD</host>
+                                        <key>net.if.out[{#IFNAME}]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                    </graph_prototypes>
+                </discovery_rule>
+                <discovery_rule>
+                    <uuid>f299c3ef881249898706c9e257e23185</uuid>
+                    <name>Mounted filesystem discovery</name>
+                    <key>vfs.fs.discovery</key>
+                    <filter>
+                        <conditions>
+                            <condition>
+                                <macro>{#FSTYPE}</macro>
+                                <value>@File systems for discovery</value>
+                                <formulaid>A</formulaid>
+                            </condition>
+                        </conditions>
+                    </filter>
+                    <description>Discovery of file systems of different types as defined in global regular expression &quot;File systems for discovery&quot;.</description>
+                    <item_prototypes>
+                        <item_prototype>
+                            <uuid>d61d41cd00904dbcacd1e61ae88e3485</uuid>
+                            <name>Free inodes on {#FSNAME} (percentage)</name>
+                            <key>vfs.fs.inode[{#FSNAME},pfree]</key>
+                            <history>1w</history>
+                            <value_type>FLOAT</value_type>
+                            <units>%</units>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Filesystems</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>1a49a0cf823a4338893db88b2caebba2</uuid>
+                                    <expression>last(/Template Google OS FreeBSD/vfs.fs.inode[{#FSNAME},pfree])&lt;20</expression>
+                                    <name>Free inodes is less than 20% on volume {#FSNAME}</name>
+                                    <priority>WARNING</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>2c91e0b6a47f4daaa0bff66d80a68c39</uuid>
+                            <name>Free disk space on {#FSNAME}</name>
+                            <key>vfs.fs.size[{#FSNAME},free]</key>
+                            <history>1w</history>
+                            <units>B</units>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Filesystems</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>90630816d89c4aac939e3823dc522bae</uuid>
+                            <name>Free disk space on {#FSNAME} (percentage)</name>
+                            <key>vfs.fs.size[{#FSNAME},pfree]</key>
+                            <history>1w</history>
+                            <value_type>FLOAT</value_type>
+                            <units>%</units>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Filesystems</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>5579c1d5531b4c4ebba10d5ac038c467</uuid>
+                                    <expression>last(/Template Google OS FreeBSD/vfs.fs.size[{#FSNAME},pfree])&lt;20</expression>
+                                    <name>Free disk space is less than 20% on volume {#FSNAME}</name>
+                                    <priority>WARNING</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>8b842caa12264bbe8c27bd2468ad93c7</uuid>
+                            <name>Total disk space on {#FSNAME}</name>
+                            <key>vfs.fs.size[{#FSNAME},total]</key>
+                            <history>1w</history>
+                            <units>B</units>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Filesystems</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>32859eec814e45eb98890c1c1a311931</uuid>
+                            <name>Used disk space on {#FSNAME}</name>
+                            <key>vfs.fs.size[{#FSNAME},used]</key>
+                            <history>1w</history>
+                            <units>B</units>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Filesystems</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                    </item_prototypes>
+                    <graph_prototypes>
+                        <graph_prototype>
+                            <uuid>6a2fc6a0a88644008ddd2cba4e019e5d</uuid>
+                            <name>Disk space usage {#FSNAME}</name>
+                            <width>600</width>
+                            <height>340</height>
+                            <show_work_period>NO</show_work_period>
+                            <show_triggers>NO</show_triggers>
+                            <type>PIE</type>
+                            <show_3d>YES</show_3d>
+                            <graph_items>
+                                <graph_item>
+                                    <color>C80000</color>
+                                    <type>GRAPH_SUM</type>
+                                    <item>
+                                        <host>Template Google OS FreeBSD</host>
+                                        <key>vfs.fs.size[{#FSNAME},total]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <color>00C800</color>
+                                    <item>
+                                        <host>Template Google OS FreeBSD</host>
+                                        <key>vfs.fs.size[{#FSNAME},free]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                    </graph_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+            <dashboards>
+                <dashboard>
+                    <uuid>72bd5bb2cea44c93b20a1f8d5db2f908</uuid>
+                    <name>System performance</name>
+                    <pages>
+                        <page>
+                            <widgets>
+                                <widget>
+                                    <type>GRAPH_CLASSIC</type>
+                                    <width>12</width>
+                                    <height>5</height>
+                                    <fields>
+                                        <field>
+                                            <type>INTEGER</type>
+                                            <name>source_type</name>
+                                            <value>0</value>
+                                        </field>
+                                        <field>
+                                            <type>GRAPH</type>
+                                            <name>graphid</name>
+                                            <value>
+                                                <host>Template Google OS FreeBSD</host>
+                                                <name>CPU load</name>
+                                            </value>
+                                        </field>
+                                    </fields>
+                                </widget>
+                                <widget>
+                                    <type>GRAPH_CLASSIC</type>
+                                    <x>12</x>
+                                    <width>12</width>
+                                    <height>5</height>
+                                    <fields>
+                                        <field>
+                                            <type>INTEGER</type>
+                                            <name>source_type</name>
+                                            <value>0</value>
+                                        </field>
+                                        <field>
+                                            <type>GRAPH</type>
+                                            <name>graphid</name>
+                                            <value>
+                                                <host>Template Google OS FreeBSD</host>
+                                                <name>CPU utilization</name>
+                                            </value>
+                                        </field>
+                                    </fields>
+                                </widget>
+                                <widget>
+                                    <type>GRAPH_CLASSIC</type>
+                                    <y>5</y>
+                                    <width>12</width>
+                                    <height>7</height>
+                                    <fields>
+                                        <field>
+                                            <type>INTEGER</type>
+                                            <name>source_type</name>
+                                            <value>0</value>
+                                        </field>
+                                        <field>
+                                            <type>GRAPH</type>
+                                            <name>graphid</name>
+                                            <value>
+                                                <host>Template Google OS FreeBSD</host>
+                                                <name>Memory usage</name>
+                                            </value>
+                                        </field>
+                                    </fields>
+                                </widget>
+                                <widget>
+                                    <type>GRAPH_CLASSIC</type>
+                                    <x>12</x>
+                                    <y>5</y>
+                                    <width>12</width>
+                                    <height>7</height>
+                                    <fields>
+                                        <field>
+                                            <type>INTEGER</type>
+                                            <name>source_type</name>
+                                            <value>0</value>
+                                        </field>
+                                        <field>
+                                            <type>GRAPH</type>
+                                            <name>graphid</name>
+                                            <value>
+                                                <host>Template Google OS FreeBSD</host>
+                                                <name>Swap usage</name>
+                                            </value>
+                                        </field>
+                                    </fields>
+                                </widget>
+                            </widgets>
+                        </page>
+                    </pages>
+                </dashboard>
+            </dashboards>
+        </template>
+        <template>
+            <uuid>f5fa76fac5b240358980050b879bf497</uuid>
+            <template>Template Google OS Linux</template>
+            <name>Template Google OS Linux</name>
+            <templates>
+                <template>
+                    <name>Template Google App Zabbix Agent</name>
+                </template>
+            </templates>
+            <groups>
+                <group>
+                    <name>Public/Google</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <uuid>8b2488da94fd412db98b3cd3055efb48</uuid>
+                    <name>Maximum number of opened files</name>
+                    <key>kernel.maxfiles</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <description>It could be increased by using sysctrl utility or modifying file /etc/sysctl.conf.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>OS</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>9f31bdba420c42c290c9485723b14963</uuid>
+                            <expression>last(/Template Google OS Linux/kernel.maxfiles)&lt;1024</expression>
+                            <name>Configured max number of opened files is too low on {HOST.NAME}</name>
+                            <priority>INFO</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>f3463ca8f7d74e6f867622686e49090c</uuid>
+                    <name>Maximum number of processes</name>
+                    <key>kernel.maxproc</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <description>It could be increased by using sysctrl utility or modifying file /etc/sysctl.conf.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>OS</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>db08c18fa59d40d3b299c6524cddd79c</uuid>
+                            <expression>last(/Template Google OS Linux/kernel.maxproc)&lt;256</expression>
+                            <name>Configured max number of processes is too low on {HOST.NAME}</name>
+                            <priority>INFO</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>a7a1a51de32d42a3accd98cee4fac5f2</uuid>
+                    <name>Number of running processes</name>
+                    <key>proc.num[,,run]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <description>Number of processes in running state.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Processes</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>bdf5dc666a834260b41f7f8c463b0581</uuid>
+                            <expression>avg(/Template Google OS Linux/proc.num[,,run],1m)&gt;30</expression>
+                            <name>Too many processes running on {HOST.NAME}</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>cd187c70113b4728b4723b271dcb02eb</uuid>
+                    <name>Number of processes</name>
+                    <key>proc.num[]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <description>Total number of processes in any state.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Processes</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>3f4c8a5c032e489092d1a209d4907c59</uuid>
+                            <expression>avg(/Template Google OS Linux/proc.num[],1m)&gt;300</expression>
+                            <name>Too many processes on {HOST.NAME}</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>9fadda9d1b8e47daba01c85030124c0d</uuid>
+                    <name>Host boot time</name>
+                    <key>system.boottime</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <units>unixtime</units>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>General</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>OS</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>6c460b3a1fb349d68bc8750af9e58f19</uuid>
+                    <name>Interrupts per second</name>
+                    <key>system.cpu.intr</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <units>ips</units>
+                    <preprocessing>
+                        <step>
+                            <type>CHANGE_PER_SECOND</type>
+                            <parameters>
+                                <parameter/>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>CPU</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Performance</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>37d354e23d0441618208167788be7798</uuid>
+                    <name>Processor load (1 min average per core)</name>
+                    <key>system.cpu.load[percpu,avg1]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <value_type>FLOAT</value_type>
+                    <description>The processor load is calculated as system CPU load divided by number of CPU cores.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>CPU</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Performance</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>085e87288add4a2589581f018260a80d</uuid>
+                            <expression>avg(/Template Google OS Linux/system.cpu.load[percpu,avg1],1m)&gt;5</expression>
+                            <name>Processor load is too high on {HOST.NAME}</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>654953dd326c474c83677a03ed817e3a</uuid>
+                    <name>Processor load (5 min average per core)</name>
+                    <key>system.cpu.load[percpu,avg5]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <value_type>FLOAT</value_type>
+                    <description>The processor load is calculated as system CPU load divided by number of CPU cores.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>CPU</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Performance</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>653b4af555ea4afba4d6b065555809b2</uuid>
+                    <name>Processor load (15 min average per core)</name>
+                    <key>system.cpu.load[percpu,avg15]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <value_type>FLOAT</value_type>
+                    <description>The processor load is calculated as system CPU load divided by number of CPU cores.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>CPU</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Performance</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>94de4295b8ec4c86bade701c872aae0c</uuid>
+                    <name>Context switches per second</name>
+                    <key>system.cpu.switches</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <units>sps</units>
+                    <preprocessing>
+                        <step>
+                            <type>CHANGE_PER_SECOND</type>
+                            <parameters>
+                                <parameter/>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>CPU</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Performance</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>752103a7d0694d2f96a0de55088312a0</uuid>
+                    <name>CPU idle time</name>
+                    <key>system.cpu.util[,idle]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <description>The time the CPU has spent doing nothing.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>CPU</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Performance</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>b916d4ab594c40bfbd35a08b4587765d</uuid>
+                    <name>CPU interrupt time</name>
+                    <key>system.cpu.util[,interrupt]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <description>The amount of time the CPU has been servicing hardware interrupts.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>CPU</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Performance</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>ab422bc2ca1d404d89e354cfc9b77a9e</uuid>
+                    <name>CPU iowait time</name>
+                    <key>system.cpu.util[,iowait]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <description>Amount of time the CPU has been waiting for I/O to complete.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>CPU</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Performance</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>a3a7a2ce5eb5479ab10f96fd748f7e71</uuid>
+                            <expression>avg(/Template Google OS Linux/system.cpu.util[,iowait],1m)&gt;20</expression>
+                            <name>Disk I/O is overloaded on {HOST.NAME}</name>
+                            <priority>WARNING</priority>
+                            <description>OS spends significant time waiting for I/O (input/output) operations. It could be indicator of performance issues with storage system.</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>88419dc843674876a91722871210458f</uuid>
+                    <name>CPU nice time</name>
+                    <key>system.cpu.util[,nice]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <description>The time the CPU has spent running users' processes that have been niced.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>CPU</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Performance</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>f173dfc6ed1448caa8eb2a164937b784</uuid>
+                    <name>CPU softirq time</name>
+                    <key>system.cpu.util[,softirq]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <description>The amount of time the CPU has been servicing software interrupts.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>CPU</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Performance</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>4ab07ad4c0f140169675178b0767b9b7</uuid>
+                    <name>CPU steal time</name>
+                    <key>system.cpu.util[,steal]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <description>The amount of CPU 'stolen' from this virtual machine by the hypervisor for other tasks (such as running another virtual machine).</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>CPU</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Performance</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>cd379bf1fd7149a1809ade1227d3514a</uuid>
+                    <name>CPU system time</name>
+                    <key>system.cpu.util[,system]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <description>The time the CPU has spent running the kernel and its processes.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>CPU</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Performance</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>40331bf3dfa0428e8966fd09c02d0327</uuid>
+                    <name>CPU user time</name>
+                    <key>system.cpu.util[,user]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <description>The time the CPU has spent running users' processes that are not niced.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>CPU</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Performance</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>d6b6a807ebbf45529b6997f04cb9ef67</uuid>
+                    <name>Host name</name>
+                    <key>system.hostname</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <description>System host name.</description>
+                    <inventory_link>NAME</inventory_link>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>General</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>OS</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>74881f759b0a47649e00696b702a8533</uuid>
+                            <expression>(last(/Template Google OS Linux/system.hostname,#1)&lt;&gt;last(/Template Google OS Linux/system.hostname,#2))&gt;0</expression>
+                            <name>Hostname was changed on {HOST.NAME}</name>
+                            <priority>INFO</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>51c32be132f148838349e6864ec9a3f4</uuid>
+                    <name>System MAC address</name>
+                    <key>system.hw.macaddr</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <inventory_link>MACADDRESS_A</inventory_link>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>OS</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>5314f8fd85cd48ec80a6c3d328b1b6f1</uuid>
+                    <name>Host local time</name>
+                    <key>system.localtime</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <units>unixtime</units>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>General</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>OS</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>9b92c5ece28b4162b4df8af74470e9a8</uuid>
+                    <name>System arch</name>
+                    <key>system.sw.arch</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <inventory_link>HW_ARCH</inventory_link>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>OS</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>db4d050adfd74d98ad27c90dca76cffe</uuid>
+                    <name>System OS</name>
+                    <key>system.sw.os</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <inventory_link>OS_FULL</inventory_link>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>OS</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>66efc6e6ffdd4796aab080f9c40aa51f</uuid>
+                    <name>System google package</name>
+                    <key>system.sw.packages[google]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <inventory_link>SOFTWARE</inventory_link>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>OS</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>5f6cdc4daf1a4da7b2447aaac7674592</uuid>
+                    <name>Free swap space</name>
+                    <key>system.swap.size[,free]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <units>B</units>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Memory</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>be4fce1563ee433ea30e62fd290fe0be</uuid>
+                    <name>Free swap space in %</name>
+                    <key>system.swap.size[,pfree]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Memory</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>19f86e5d4274472ab2a6ff5ef38c0425</uuid>
+                            <expression>last(/Template Google OS Linux/system.swap.size[,pfree])&lt;50</expression>
+                            <name>Lack of free swap space on {HOST.NAME}</name>
+                            <status>DISABLED</status>
+                            <priority>WARNING</priority>
+                            <description>It probably means that the systems requires more physical memory.</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>01fd4d3b21554152b98a88894eade5f1</uuid>
+                    <name>Total swap space</name>
+                    <key>system.swap.size[,total]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <units>B</units>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Memory</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>e84ab0013c894f92b813cd34a9e3a8e7</uuid>
+                    <name>System information</name>
+                    <key>system.uname</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <description>The information as normally returned by 'uname -a'.</description>
+                    <inventory_link>OS</inventory_link>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>General</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>OS</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>0dc6f2d13c184220b16c7f540968ce0d</uuid>
+                            <expression>(last(/Template Google OS Linux/system.uname,#1)&lt;&gt;last(/Template Google OS Linux/system.uname,#2))&gt;0</expression>
+                            <name>Host information was changed on {HOST.NAME}</name>
+                            <priority>INFO</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>c7d7f0c62b9e49e296d67885862e6006</uuid>
+                    <name>System uptime</name>
+                    <key>system.uptime</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <units>uptime</units>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>General</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>OS</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>7a8c4663e8804c5289040a36965fb102</uuid>
+                            <expression>change(/Template Google OS Linux/system.uptime)&lt;0</expression>
+                            <name>{HOST.NAME} has just been restarted</name>
+                            <priority>INFO</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>9c93d2e53b1c41d285082d936c383be0</uuid>
+                    <name>Number of logged in users</name>
+                    <key>system.users.num</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <description>Number of users who are currently logged in.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>OS</value>
+                        </tag>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Security</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>a360bbf25c094eb993dfea97ea718081</uuid>
+                    <name>Checksum of /etc/passwd</name>
+                    <key>vfs.file.cksum[/etc/passwd]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Security</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>9cf57afab85c4795be8ba73721a80b82</uuid>
+                            <expression>(last(/Template Google OS Linux/vfs.file.cksum[/etc/passwd],#1)&lt;&gt;last(/Template Google OS Linux/vfs.file.cksum[/etc/passwd],#2))&gt;0</expression>
+                            <name>/etc/passwd has been changed on {HOST.NAME}</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>cdf18b7da9414e3fb03e116817317ab9</uuid>
+                    <name>Available memory</name>
+                    <key>vm.memory.size[available]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <units>B</units>
+                    <description>Available memory is defined as free+cached+buffers memory.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Memory</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>6a2bc0eb0e074eb7a878ce97a9115673</uuid>
+                            <expression>last(/Template Google OS Linux/vm.memory.size[available])&lt;20M</expression>
+                            <name>Lack of available memory on server {HOST.NAME}</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>833eacc91b664778adbb14355e3378e1</uuid>
+                    <name>Total memory</name>
+                    <key>vm.memory.size[total]</key>
+                    <delay>10s</delay>
+                    <history>1w</history>
+                    <units>B</units>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Memory</value>
+                        </tag>
+                    </tags>
+                </item>
+            </items>
+            <discovery_rules>
+                <discovery_rule>
+                    <uuid>59f32e7fdfe442ea878fe797e449178d</uuid>
+                    <name>Network interface discovery</name>
+                    <key>net.if.discovery</key>
+                    <filter>
+                        <conditions>
+                            <condition>
+                                <macro>{#IFNAME}</macro>
+                                <value>@Network interfaces for discovery</value>
+                                <formulaid>A</formulaid>
+                            </condition>
+                        </conditions>
+                    </filter>
+                    <lifetime>1d</lifetime>
+                    <description>Discovery of network interfaces as defined in global regular expression &quot;Network interfaces for discovery&quot;.</description>
+                    <item_prototypes>
+                        <item_prototype>
+                            <uuid>3fde0bcee80942c9a093f2f83e5de95e</uuid>
+                            <name>Incoming network traffic on {#IFNAME}</name>
+                            <key>net.if.in[{#IFNAME}]</key>
+                            <history>1w</history>
+                            <units>bps</units>
+                            <preprocessing>
+                                <step>
+                                    <type>CHANGE_PER_SECOND</type>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>MULTIPLIER</type>
+                                    <parameters>
+                                        <parameter>8</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Network interfaces</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>36d20d9d6c324a2285e4faadfa6ed00e</uuid>
+                            <name>Outgoing network traffic on {#IFNAME}</name>
+                            <key>net.if.out[{#IFNAME}]</key>
+                            <history>1w</history>
+                            <units>bps</units>
+                            <preprocessing>
+                                <step>
+                                    <type>CHANGE_PER_SECOND</type>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>MULTIPLIER</type>
+                                    <parameters>
+                                        <parameter>8</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Network interfaces</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                    </item_prototypes>
+                    <graph_prototypes>
+                        <graph_prototype>
+                            <uuid>cfee699aa16b4129ac91f10584468a80</uuid>
+                            <name>Network traffic on {#IFNAME}</name>
+                            <ymin_type_1>FIXED</ymin_type_1>
+                            <graph_items>
+                                <graph_item>
+                                    <drawtype>GRADIENT_LINE</drawtype>
+                                    <color>00AA00</color>
+                                    <item>
+                                        <host>Template Google OS Linux</host>
+                                        <key>net.if.in[{#IFNAME}]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <drawtype>GRADIENT_LINE</drawtype>
+                                    <color>3333FF</color>
+                                    <item>
+                                        <host>Template Google OS Linux</host>
+                                        <key>net.if.out[{#IFNAME}]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                    </graph_prototypes>
+                </discovery_rule>
+                <discovery_rule>
+                    <uuid>194528dce0234e6fa40dab029627302b</uuid>
+                    <name>Mounted filesystem discovery</name>
+                    <key>vfs.fs.discovery</key>
+                    <filter>
+                        <conditions>
+                            <condition>
+                                <macro>{#FSTYPE}</macro>
+                                <value>@File systems for discovery</value>
+                                <formulaid>A</formulaid>
+                            </condition>
+                        </conditions>
+                    </filter>
+                    <lifetime>1d</lifetime>
+                    <description>Discovery of file systems of different types as defined in global regular expression &quot;File systems for discovery&quot;.</description>
+                    <item_prototypes>
+                        <item_prototype>
+                            <uuid>c5fcc377678b4b24a90ae82cf31a1404</uuid>
+                            <name>Free inodes on {#FSNAME} (percentage)</name>
+                            <key>vfs.fs.inode[{#FSNAME},pfree]</key>
+                            <history>1w</history>
+                            <value_type>FLOAT</value_type>
+                            <units>%</units>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Filesystems</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>a67d2a3f7b53471ba0363e90db328d8d</uuid>
+                                    <expression>last(/Template Google OS Linux/vfs.fs.inode[{#FSNAME},pfree])&lt;20</expression>
+                                    <name>Free inodes is less than 20% on volume {#FSNAME}</name>
+                                    <priority>WARNING</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>e54521a577f5448ca683ebcdd4995636</uuid>
+                            <name>Free disk space on {#FSNAME}</name>
+                            <key>vfs.fs.size[{#FSNAME},free]</key>
+                            <history>1w</history>
+                            <units>B</units>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Filesystems</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>9ee43700966a4f219a1e6df383ab1b66</uuid>
+                            <name>Free disk space on {#FSNAME} (percentage)</name>
+                            <key>vfs.fs.size[{#FSNAME},pfree]</key>
+                            <history>1w</history>
+                            <value_type>FLOAT</value_type>
+                            <units>%</units>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Filesystems</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>28fe1298f721446cbcb35d843895e62d</uuid>
+                                    <expression>last(/Template Google OS Linux/vfs.fs.size[{#FSNAME},pfree])&lt;20</expression>
+                                    <name>Free disk space is less than 20% on volume {#FSNAME}</name>
+                                    <priority>WARNING</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>c51b562060ff4b9a9c7542623f05a809</uuid>
+                            <name>Total disk space on {#FSNAME}</name>
+                            <key>vfs.fs.size[{#FSNAME},total]</key>
+                            <history>1w</history>
+                            <units>B</units>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Filesystems</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>e0086c98c24143749d062d5ae95e6541</uuid>
+                            <name>Used disk space on {#FSNAME}</name>
+                            <key>vfs.fs.size[{#FSNAME},used]</key>
+                            <history>1w</history>
+                            <units>B</units>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Filesystems</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                    </item_prototypes>
+                    <graph_prototypes>
+                        <graph_prototype>
+                            <uuid>ac6e79c897bb4569ab930795f41f5772</uuid>
+                            <name>Disk space usage {#FSNAME}</name>
+                            <width>600</width>
+                            <height>340</height>
+                            <show_work_period>NO</show_work_period>
+                            <show_triggers>NO</show_triggers>
+                            <type>PIE</type>
+                            <show_3d>YES</show_3d>
+                            <graph_items>
+                                <graph_item>
+                                    <color>C80000</color>
+                                    <type>GRAPH_SUM</type>
+                                    <item>
+                                        <host>Template Google OS Linux</host>
+                                        <key>vfs.fs.size[{#FSNAME},total]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <color>00C800</color>
+                                    <item>
+                                        <host>Template Google OS Linux</host>
+                                        <key>vfs.fs.size[{#FSNAME},free]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                    </graph_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+            <dashboards>
+                <dashboard>
+                    <uuid>31cf8bb44efc43b18a0caad21da7566c</uuid>
+                    <name>System performance</name>
+                    <pages>
+                        <page>
+                            <widgets>
+                                <widget>
+                                    <type>GRAPH_CLASSIC</type>
+                                    <width>12</width>
+                                    <height>5</height>
+                                    <fields>
+                                        <field>
+                                            <type>INTEGER</type>
+                                            <name>source_type</name>
+                                            <value>0</value>
+                                        </field>
+                                        <field>
+                                            <type>GRAPH</type>
+                                            <name>graphid</name>
+                                            <value>
+                                                <host>Template Google OS Linux</host>
+                                                <name>CPU load</name>
+                                            </value>
+                                        </field>
+                                    </fields>
+                                </widget>
+                                <widget>
+                                    <type>GRAPH_CLASSIC</type>
+                                    <x>12</x>
+                                    <width>12</width>
+                                    <height>5</height>
+                                    <fields>
+                                        <field>
+                                            <type>INTEGER</type>
+                                            <name>source_type</name>
+                                            <value>0</value>
+                                        </field>
+                                        <field>
+                                            <type>GRAPH</type>
+                                            <name>graphid</name>
+                                            <value>
+                                                <host>Template Google OS Linux</host>
+                                                <name>CPU utilization</name>
+                                            </value>
+                                        </field>
+                                    </fields>
+                                </widget>
+                                <widget>
+                                    <type>GRAPH_CLASSIC</type>
+                                    <y>5</y>
+                                    <width>12</width>
+                                    <height>7</height>
+                                    <fields>
+                                        <field>
+                                            <type>INTEGER</type>
+                                            <name>source_type</name>
+                                            <value>0</value>
+                                        </field>
+                                        <field>
+                                            <type>GRAPH</type>
+                                            <name>graphid</name>
+                                            <value>
+                                                <host>Template Google OS Linux</host>
+                                                <name>Memory usage</name>
+                                            </value>
+                                        </field>
+                                    </fields>
+                                </widget>
+                                <widget>
+                                    <type>GRAPH_CLASSIC</type>
+                                    <x>12</x>
+                                    <y>5</y>
+                                    <width>12</width>
+                                    <height>7</height>
+                                    <fields>
+                                        <field>
+                                            <type>INTEGER</type>
+                                            <name>source_type</name>
+                                            <value>0</value>
+                                        </field>
+                                        <field>
+                                            <type>GRAPH</type>
+                                            <name>graphid</name>
+                                            <value>
+                                                <host>Template Google OS Linux</host>
+                                                <name>Swap usage</name>
+                                            </value>
+                                        </field>
+                                    </fields>
+                                </widget>
+                                <widget>
+                                    <type>GRAPH_CLASSIC</type>
+                                    <y>12</y>
+                                    <width>12</width>
+                                    <height>5</height>
+                                    <fields>
+                                        <field>
+                                            <type>INTEGER</type>
+                                            <name>source_type</name>
+                                            <value>1</value>
+                                        </field>
+                                        <field>
+                                            <type>ITEM</type>
+                                            <name>itemid</name>
+                                            <value>
+                                                <host>Template Google OS Linux</host>
+                                                <key>proc.num[]</key>
+                                            </value>
+                                        </field>
+                                    </fields>
+                                </widget>
+                                <widget>
+                                    <type>GRAPH_CLASSIC</type>
+                                    <x>12</x>
+                                    <y>12</y>
+                                    <width>12</width>
+                                    <height>5</height>
+                                    <fields>
+                                        <field>
+                                            <type>INTEGER</type>
+                                            <name>source_type</name>
+                                            <value>1</value>
+                                        </field>
+                                        <field>
+                                            <type>ITEM</type>
+                                            <name>itemid</name>
+                                            <value>
+                                                <host>Template Google OS Linux</host>
+                                                <key>proc.num[,,run]</key>
+                                            </value>
+                                        </field>
+                                    </fields>
+                                </widget>
+                            </widgets>
+                        </page>
+                    </pages>
+                </dashboard>
+            </dashboards>
+        </template>
+    </templates>
+    <graphs>
+        <graph>
+            <uuid>1ffd1bde186c42cb884249adb04e013c</uuid>
+            <name>CPU jumps</name>
+            <graph_items>
+                <graph_item>
+                    <color>009900</color>
+                    <item>
+                        <host>Template Google OS FreeBSD</host>
+                        <key>system.cpu.switches</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>000099</color>
+                    <item>
+                        <host>Template Google OS FreeBSD</host>
+                        <key>system.cpu.intr</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <uuid>851fb7e2ee7347028949aa21541bf666</uuid>
+            <name>CPU jumps</name>
+            <graph_items>
+                <graph_item>
+                    <color>009900</color>
+                    <item>
+                        <host>Template Google OS Linux</host>
+                        <key>system.cpu.switches</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>000099</color>
+                    <item>
+                        <host>Template Google OS Linux</host>
+                        <key>system.cpu.intr</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <uuid>f1192da53ae046278f26671d11609fb0</uuid>
+            <name>CPU load</name>
+            <ymin_type_1>FIXED</ymin_type_1>
+            <graph_items>
+                <graph_item>
+                    <color>009900</color>
+                    <item>
+                        <host>Template Google OS FreeBSD</host>
+                        <key>system.cpu.load[percpu,avg1]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>000099</color>
+                    <item>
+                        <host>Template Google OS FreeBSD</host>
+                        <key>system.cpu.load[percpu,avg5]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <color>990000</color>
+                    <item>
+                        <host>Template Google OS FreeBSD</host>
+                        <key>system.cpu.load[percpu,avg15]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <uuid>f883a0a008f44c099a793d51f25a1e7f</uuid>
+            <name>CPU load</name>
+            <ymin_type_1>FIXED</ymin_type_1>
+            <graph_items>
+                <graph_item>
+                    <color>009900</color>
+                    <item>
+                        <host>Template Google OS Linux</host>
+                        <key>system.cpu.load[percpu,avg1]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>000099</color>
+                    <item>
+                        <host>Template Google OS Linux</host>
+                        <key>system.cpu.load[percpu,avg5]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <color>990000</color>
+                    <item>
+                        <host>Template Google OS Linux</host>
+                        <key>system.cpu.load[percpu,avg15]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <uuid>c1ad1ebe7f3940449bb8dd0bc1682b1d</uuid>
+            <name>CPU utilization</name>
+            <show_triggers>NO</show_triggers>
+            <type>STACKED</type>
+            <ymin_type_1>FIXED</ymin_type_1>
+            <ymax_type_1>FIXED</ymax_type_1>
+            <graph_items>
+                <graph_item>
+                    <drawtype>FILLED_REGION</drawtype>
+                    <color>FF5555</color>
+                    <item>
+                        <host>Template Google OS Linux</host>
+                        <key>system.cpu.util[,steal]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <drawtype>FILLED_REGION</drawtype>
+                    <color>55FF55</color>
+                    <item>
+                        <host>Template Google OS Linux</host>
+                        <key>system.cpu.util[,softirq]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <drawtype>FILLED_REGION</drawtype>
+                    <color>009999</color>
+                    <item>
+                        <host>Template Google OS Linux</host>
+                        <key>system.cpu.util[,interrupt]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>3</sortorder>
+                    <drawtype>FILLED_REGION</drawtype>
+                    <color>990099</color>
+                    <item>
+                        <host>Template Google OS Linux</host>
+                        <key>system.cpu.util[,nice]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>4</sortorder>
+                    <drawtype>FILLED_REGION</drawtype>
+                    <color>999900</color>
+                    <item>
+                        <host>Template Google OS Linux</host>
+                        <key>system.cpu.util[,iowait]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>5</sortorder>
+                    <drawtype>FILLED_REGION</drawtype>
+                    <color>990000</color>
+                    <item>
+                        <host>Template Google OS Linux</host>
+                        <key>system.cpu.util[,system]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>6</sortorder>
+                    <drawtype>FILLED_REGION</drawtype>
+                    <color>000099</color>
+                    <item>
+                        <host>Template Google OS Linux</host>
+                        <key>system.cpu.util[,user]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>7</sortorder>
+                    <drawtype>FILLED_REGION</drawtype>
+                    <color>009900</color>
+                    <item>
+                        <host>Template Google OS Linux</host>
+                        <key>system.cpu.util[,idle]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <uuid>c401705ba82e498ebdff93921930b811</uuid>
+            <name>CPU utilization</name>
+            <show_triggers>NO</show_triggers>
+            <type>STACKED</type>
+            <ymin_type_1>FIXED</ymin_type_1>
+            <ymax_type_1>FIXED</ymax_type_1>
+            <graph_items>
+                <graph_item>
+                    <drawtype>FILLED_REGION</drawtype>
+                    <color>009999</color>
+                    <item>
+                        <host>Template Google OS FreeBSD</host>
+                        <key>system.cpu.util[,interrupt]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <drawtype>FILLED_REGION</drawtype>
+                    <color>990099</color>
+                    <item>
+                        <host>Template Google OS FreeBSD</host>
+                        <key>system.cpu.util[,nice]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <drawtype>FILLED_REGION</drawtype>
+                    <color>990000</color>
+                    <item>
+                        <host>Template Google OS FreeBSD</host>
+                        <key>system.cpu.util[,system]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>3</sortorder>
+                    <drawtype>FILLED_REGION</drawtype>
+                    <color>000099</color>
+                    <item>
+                        <host>Template Google OS FreeBSD</host>
+                        <key>system.cpu.util[,user]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>4</sortorder>
+                    <drawtype>FILLED_REGION</drawtype>
+                    <color>009900</color>
+                    <item>
+                        <host>Template Google OS FreeBSD</host>
+                        <key>system.cpu.util[,idle]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <uuid>7a6a9d26fa274a56a8cb4a992f5e3f90</uuid>
+            <name>ICMP Ping</name>
+            <graph_items>
+                <graph_item>
+                    <drawtype>BOLD_LINE</drawtype>
+                    <color>FF0000</color>
+                    <item>
+                        <host>Template Google ICMP Ping</host>
+                        <key>icmppingloss</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <drawtype>BOLD_LINE</drawtype>
+                    <color>0040FF</color>
+                    <item>
+                        <host>Template Google ICMP Ping</host>
+                        <key>icmppingsec</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <uuid>288a72e486a8494ab621bf64b710bd49</uuid>
+            <name>Memory usage</name>
+            <ymin_type_1>FIXED</ymin_type_1>
+            <ymax_type_1>ITEM</ymax_type_1>
+            <ymax_item_1>
+                <host>Template Google OS FreeBSD</host>
+                <key>vm.memory.size[total]</key>
+            </ymax_item_1>
+            <graph_items>
+                <graph_item>
+                    <drawtype>GRADIENT_LINE</drawtype>
+                    <color>00C800</color>
+                    <item>
+                        <host>Template Google OS FreeBSD</host>
+                        <key>vm.memory.size[available]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <uuid>bfead1b61a70448d81f6c52abd1b0319</uuid>
+            <name>Memory usage</name>
+            <ymin_type_1>FIXED</ymin_type_1>
+            <ymax_type_1>ITEM</ymax_type_1>
+            <ymax_item_1>
+                <host>Template Google OS Linux</host>
+                <key>vm.memory.size[total]</key>
+            </ymax_item_1>
+            <graph_items>
+                <graph_item>
+                    <drawtype>GRADIENT_LINE</drawtype>
+                    <color>00C800</color>
+                    <item>
+                        <host>Template Google OS Linux</host>
+                        <key>vm.memory.size[available]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <uuid>cfc7b478fe404a1c9f09c5169d272b3e</uuid>
+            <name>Swap usage</name>
+            <width>600</width>
+            <height>340</height>
+            <show_work_period>NO</show_work_period>
+            <show_triggers>NO</show_triggers>
+            <type>PIE</type>
+            <show_3d>YES</show_3d>
+            <graph_items>
+                <graph_item>
+                    <color>AA0000</color>
+                    <type>GRAPH_SUM</type>
+                    <item>
+                        <host>Template Google OS Linux</host>
+                        <key>system.swap.size[,total]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>00AA00</color>
+                    <item>
+                        <host>Template Google OS Linux</host>
+                        <key>system.swap.size[,free]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <uuid>7e2485ac12ff4c3892840760aa5e9659</uuid>
+            <name>Swap usage</name>
+            <width>600</width>
+            <height>340</height>
+            <show_work_period>NO</show_work_period>
+            <show_triggers>NO</show_triggers>
+            <type>PIE</type>
+            <show_3d>YES</show_3d>
+            <graph_items>
+                <graph_item>
+                    <color>AA0000</color>
+                    <type>GRAPH_SUM</type>
+                    <item>
+                        <host>Template Google OS FreeBSD</host>
+                        <key>system.swap.size[,total]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>00AA00</color>
+                    <item>
+                        <host>Template Google OS FreeBSD</host>
+                        <key>system.swap.size[,free]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+    </graphs>
+</zabbix_export>
