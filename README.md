@@ -79,4 +79,3 @@ cli4 --post name='srv05' type=A content="34.91.21.217" /zones/:pfsense.cz/dns_re
 - Zabbxi Auto-Registration - Ectrypted
 - Ansible configuration  
 - Other ...
-y
