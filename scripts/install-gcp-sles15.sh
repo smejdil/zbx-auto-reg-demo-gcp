@@ -7,6 +7,9 @@
 
 # SLES 15
 
+zypper install -y git
+git clone https://github.com/smejdil/zbx-auto-reg-demo-gcp.git
+
 # Zabbix aggent 2
 cd /tmp
 rpm -Uvh --nosignature https://repo.zabbix.com/zabbix/6.0/sles/15/x86_64/zabbix-release-6.0-3.sles15.noarch.rpm

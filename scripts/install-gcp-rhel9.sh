@@ -7,6 +7,8 @@
 
 # RHEL 9
 
+git clone https://github.com/smejdil/zbx-auto-reg-demo-gcp.git
+
 # Zabbix aggent 2
 cd /tmp
 rpm -Uvh https://repo.zabbix.com/zabbix/6.0/rhel/9/x86_64/zabbix-release-6.0-4.el9.noarch.rpm
