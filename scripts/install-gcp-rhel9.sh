@@ -10,6 +10,7 @@
 dnf -y install git
 cd /root/ && git clone https://github.com/smejdil/zbx-auto-reg-demo-gcp.git
 dnf -y install ansible-core pip
+dnf -y install python3-netaddr
 ansible-galaxy collection install community.zabbix
 cd /root/zbx-auto-reg-demo-gcp/ansible/
 ansible-playbook zabbix-agent.yml
@@ -42,5 +43,8 @@ systemctl enable zabbix-agent2
 dnf -y install httpd
 systemctl restart httpd
 systemctl enable httpd
+
+# log
+# journalctl -u google-startup-scripts.service
 
 # EOF

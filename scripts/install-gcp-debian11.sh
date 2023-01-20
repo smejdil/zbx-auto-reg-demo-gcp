@@ -45,4 +45,7 @@ apt install -y apache2
 systemctl restart apache2
 systemctl enable apache2
 
+# log
+# journalctl -u google-startup-scripts.service
+
 # EOF
