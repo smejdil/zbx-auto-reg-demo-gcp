@@ -9,7 +9,8 @@
 
 apt install -y git
 cd /root/ && git clone https://github.com/smejdil/zbx-auto-reg-demo-gcp.git
-apt install -y ansible pip
+apt update
+apt install -y ansible ansible-core pip
 ansible-galaxy collection install community.zabbix
 cd /root/zbx-auto-reg-demo-gcp/ansible/
 ansible-playbook zabbix-agent.yml
